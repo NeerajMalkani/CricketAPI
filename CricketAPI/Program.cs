@@ -1,6 +1,8 @@
 using CricketAPI;
+using CricketAPI.Helpers;
 using MySqlConnector;
 using System.Data;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,13 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 builder.Services.AddTransient<MySqlConnection>(_ => new MySqlConnection(builder.Configuration["ConnectionStrings:Default"]));
 
-
 var app = builder.Build();
-
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -25,25 +23,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-       new WeatherForecast
-       (
-           DateTime.Now.AddDays(index),
-           Random.Shared.Next(-20, 55),
-           summaries[Random.Shared.Next(summaries.Length)]
-       ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
-
+#region Continents
 app.MapGet("/getcontinents", () =>
 {
     using var connection = new MySqlConnection(app.Configuration.GetConnectionString("Default"));
@@ -54,40 +34,35 @@ app.MapGet("/getcontinents", () =>
     List<Continents> arrcontinents = new List<Continents>();
     while (reader.Read())
     {
-        Continents continents = new Continents();
-        continents.id = Convert.ToInt64(reader["id"]);
-        continents.name = Convert.ToString(reader["name"]);
+        Continents continents = Common.ConvertToObject<Continents>(reader);
         arrcontinents.Add(continents);
     }
     return arrcontinents;
 })
 .WithName("GetContinents");
+#endregion
 
-
-
+#region Fixtures
 app.MapGet("/getfixtures", () =>
 {
-    using var connection = new MySqlConnection(app.Configuration.GetConnectionString("Default"));
-    connection.Open();
-
-    using var command = new MySqlCommand("GetFixtures", connection);
-    command.CommandType = CommandType.StoredProcedure;
-    using var reader = command.ExecuteReader();
+    MySqlConnection connection = MySQLHelper.EstablishConnection(app.Configuration);
+    MySqlCommand command = MySQLHelper.ExecuteCommand(connection, "GetFixtures", CommandType.StoredProcedure);
+    MySqlDataReader reader = command.ExecuteReader();
+    Response response = new Response();
     List<Fixtures> arrfixtures = new List<Fixtures>();
     while (reader.Read())
     {
-        Fixtures fixtures = Common.ConvertToObject<Fixtures>(reader);
+        FixtureDetails fixturedetails = Common.ConvertToObject<FixtureDetails>(reader);
+        FixtureToss fixturetoss = Common.ConvertToObject<FixtureToss>(reader);
+        Fixtures? fixtures = Common.ConvertToObject<Fixtures>(reader);
+        fixtures.fixture_details = fixturedetails;
+        fixtures.fixture_toss = fixturetoss;
         arrfixtures.Add(fixtures);
     }
-    return arrfixtures;
+    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, arrfixtures);
+    return response;
 })
 .WithName("GetFixtures");
-
-
+#endregion
 
 app.Run();
-
-internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
