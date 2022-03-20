@@ -20,10 +20,7 @@ namespace CricketAPI.Helpers
                     var extractedApiKey))
             {
                 Common.CreateResponse(HttpStatusCode.Unauthorized, "Unauthorized", "API Key not provided", out response);
-                var serializerSettings = new JsonSerializerSettings();
-                serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                serializerSettings.Formatting = Formatting.Indented;
-                await context.Response.WriteAsync(JsonConvert.SerializeObject(response, serializerSettings));
+                await context.Response.WriteAsJsonAsync(response);
                 return;
             }
             var appSettings = context.RequestServices.GetRequiredService<IConfiguration>();
@@ -31,9 +28,7 @@ namespace CricketAPI.Helpers
             if (!apiKey.Equals(extractedApiKey))
             {
                 Common.CreateResponse(HttpStatusCode.Unauthorized, "Unauthorized", "Authorization has been denied for this request", out response);
-                var serializerSettings = new JsonSerializerSettings();
-                serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                await context.Response.WriteAsync(JsonConvert.SerializeObject(response, serializerSettings));
+                await context.Response.WriteAsJsonAsync(response);
                 return;
             }
             await _next(context);
