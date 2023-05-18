@@ -11,7 +11,6 @@ builder.Services.AddDbContext<DataContext>(
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
         );
-//builder.Services.AddTransient<MySqlConnection>(_ => new MySqlConnection(builder.Configuration["ConnectionStrings:Default"]));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();

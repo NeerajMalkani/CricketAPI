@@ -9,6 +9,6 @@ namespace CricketAPI.Helpers
         {
         }
 
-        public DbSet<Continents> Continents => Set<Continents>();
+        public DbSet<Teams> Teams => Set<Teams>();
     }
 }
