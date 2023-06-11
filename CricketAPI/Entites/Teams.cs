@@ -5,18 +5,11 @@ namespace CricketAPI
     public class Teams
     {
         [Key]
-        public long teamId { get; set; }
-        public string? teamName { get; set; }
-        public string? teamSName { get; set; }
-        public short teamType { get; set; }
-        public long imageId { get; set; }
-    }
-
-    public class TeamsRequest
-    {
-        /// <summary>
-        /// 1- International, 2 - League, 3 - Domestic, 4- Women
-        /// </summary>
-        public short teamType { get; set; }
+        public long id { get; set; }
+        public string? name { get; set; }
+        public string? code { get; set; }
+        public long country_id { get; set; }
+        public string? national_team { get; set; }
+        public string? image_path { get; set; }
     }
 }

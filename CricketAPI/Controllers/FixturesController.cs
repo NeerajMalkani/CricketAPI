@@ -5,33 +5,33 @@ using System.Net;
 
 namespace CricketAPI.Controllers
 {
-    [Route("api")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class TeamsController : ControllerBase
+    public class FixturesController : ControllerBase
     {
         private readonly DataContext _db;
 
-        public TeamsController(DataContext dbContext)
+        public FixturesController(DataContext dbContext)
         {
             _db = dbContext;
         }
 
         #region Get Teams
         [HttpGet]
-        [Route("getteams")]
-        public Response GetTeams()
+        [Route("getfixtures")]
+        public Response GetFixtures()
         {
             Response response = new Response();
             try
             {
-                List<Teams> teams = new TeamsRepository().GetTeams(_db);
-                if (teams.Any())
+                List<Fixtures> fixtures = new FixturesRepository().GetFixtures(_db);
+                if (fixtures.Any())
                 {
-                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, teams);
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, fixtures);
                 }
                 else
                 {
-                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, teams);
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, fixtures);
                 }
             }
             catch (Exception ex)
