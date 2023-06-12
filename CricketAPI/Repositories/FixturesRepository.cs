@@ -1,5 +1,6 @@
 ﻿using CricketAPI.Helpers;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace CricketAPI.Repositories
 {
@@ -10,7 +11,8 @@ namespace CricketAPI.Repositories
             List<Fixtures> fixtures = new List<Fixtures>();
             try
             {
-                fixtures = context.Fixtures.FromSqlRaw("CALL `cric_Get_UpcomingFixtures`()").ToList();
+                List<FixturesJson> fixturesJson = context.FixturesJson.FromSqlRaw("CALL `cric_Get_UpcomingFixtures`()").ToList();
+                fixtures = JsonConvert.DeserializeObject<List<Fixtures>>(fixturesJson[0].Fixtures) ?? throw new ArgumentException();
             }
             catch (Exception)
             {

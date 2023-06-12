@@ -4,6 +4,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CricketAPI
 {
+    public class FixturesJson
+    {
+        [Key]
+        public string Fixtures { get; set; } = "";
+    }
+
     public class Localteam
     {
         [Key]
