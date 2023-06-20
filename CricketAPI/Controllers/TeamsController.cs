@@ -5,7 +5,7 @@ using System.Net;
 
 namespace CricketAPI.Controllers
 {
-    [Route("api")]
+    [Route("api/[controller]")]
     [ApiController]
     public class TeamsController : ControllerBase
     {
