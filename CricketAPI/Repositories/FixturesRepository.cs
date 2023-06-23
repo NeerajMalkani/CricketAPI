@@ -11,12 +11,18 @@ namespace CricketAPI.Repositories
             List<Fixtures> fixtures = new List<Fixtures>();
             try
             {
-                List<FixturesJson> fixturesJson = type == "upcoming" ? 
-                    context.FixturesJson.FromSqlRaw("CALL `cric_Get_UpcomingFixtures`()").ToList() :
-                    type == "live" ?
-                    context.FixturesJson.FromSqlRaw("CALL `cric_Get_LiveFixtures`()").ToList() :
-                    context.FixturesJson.FromSqlRaw("CALL `cric_Get_RecentFixtures`()").ToList();
-                fixtures = JsonConvert.DeserializeObject<List<Fixtures>>(fixturesJson[0].Fixtures) ?? throw new ArgumentException();
+                switch (type)
+                {
+                    case "upcoming":
+                        fixtures = context.Fixtures.FromSqlRaw("CALL `cric_Get_UpcomingFixtures`()").ToList();
+                        break;
+                    case "recent":
+                        fixtures = context.Fixtures.FromSqlRaw("CALL `cric_Get_RecentFixtures`()").ToList();
+                        break;
+                    case "live":
+                        fixtures = context.Fixtures.FromSqlRaw("CALL `cric_Get_LiveFixtures`()").ToList();
+                        break;
+                }
             }
             catch (Exception)
             {

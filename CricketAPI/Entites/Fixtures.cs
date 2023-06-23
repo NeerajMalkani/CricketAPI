@@ -4,30 +4,26 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CricketAPI
 {
-    public class FixturesJson
-    {
-        [Key]
-        public string Fixtures { get; set; } = "";
-    }
 
+    [Owned]
     public class Localteam
     {
-        [Key]
-        public long id { get; set; }
         public string? code { get; set; }
         public string? name { get; set; }
         public string? image_path { get; set; }
     }
 
+
+    [Owned]
     public class Visitorteam
     {
-        [Key]
-        public long id { get; set; }
         public string? code { get; set; }
         public string? name { get; set; }
         public string? image_path { get; set; }
     }
 
+
+    [Owned]
     public class ManOfTheMatch
     {
         [Key]
@@ -36,28 +32,27 @@ namespace CricketAPI
         public string? image_path { get; set; }
     }
 
+
+    [Owned]
     public class ManOfTheSeries
     {
-        [Key]
-        public long? id { get; set; }
         public string? name { get; set; }
         public string? image_path { get; set; }
     }
- 
+
+
+    [Owned]
     public class Umpires
     {
-        [Key]
-        public long? id { get; set; }
         public string? refree { get; set; }
         public string? tv_umpire { get; set; }
         public string? first_umpire { get; set; }
         public string? second_umpire { get; set; }
     }
 
+    [Owned]
     public class Venue
     {
-        [Key]
-        public int? id { get; set; }
         public string? city { get; set; }
         public string? name { get; set; }
         public string? country { get; set; }
@@ -74,11 +69,15 @@ namespace CricketAPI
         public string? season_name { get; set; }
         public string? stage_name { get; set; }       
         public string? type { get; set; }
-        public string? round { get; set; }    
-        public Localteam? localteam { get; set; }
-        public Visitorteam? visitorteam { get; set; }
-        public Venue? venue { get; set; }
-        public Umpires? umpires { get; set; }
+        public string? round { get; set; }
+        public int? Localteamid { get; set; }
+        public Localteam? Localteam { get; set; }
+        public int? Visitorteamid { get; set; }
+        public Visitorteam? Visitorteam { get; set; }
+        public int? Venueid { get; set; }
+        public Venue? Venue { get; set; }
+        public int? Umpiresid { get; set; }
+        public Umpires? Umpires { get; set; }
         public string? note { get; set; }
         public string? status { get; set; }
         public string? elected { get; set; }
@@ -90,8 +89,10 @@ namespace CricketAPI
         public string? draw_noresult { get; set; }
         public int toss_won_team_id { get; set; }
         public int winner_team_id { get; set; }
-        public ManOfTheMatch? man_of_the_match { get; set; }       
-        public ManOfTheSeries? man_of_the_series { get; set; }
+        public int? ManOfTheMatchid { get; set; }
+        public ManOfTheMatch? ManOfTheMatch { get; set; }
+        public int? ManOfTheSeriesid { get; set; }
+        public ManOfTheSeries? ManOfTheSeries { get; set; }
         public int total_overs_played { get; set; }
     }
 }

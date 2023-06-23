@@ -11,7 +11,19 @@ namespace CricketAPI.Helpers
 
         public DbSet<Teams> Teams => Set<Teams>();
         public DbSet<Fixtures> Fixtures => Set<Fixtures>();
-        public DbSet<FixturesJson> FixturesJson => Set<FixturesJson>();
+
+
+        #region Required
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Fixtures>().OwnsOne(p => p.Localteam);
+            modelBuilder.Entity<Fixtures>().OwnsOne(p => p.Visitorteam);
+            modelBuilder.Entity<Fixtures>().OwnsOne(p => p.Venue);
+            modelBuilder.Entity<Fixtures>().OwnsOne(p => p.Umpires);
+            modelBuilder.Entity<Fixtures>().OwnsOne(p => p.ManOfTheMatch);
+            modelBuilder.Entity<Fixtures>().OwnsOne(p => p.ManOfTheSeries);
+        }
+        #endregion
 
     }
 }
