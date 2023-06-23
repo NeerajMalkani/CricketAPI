@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CricketAPI.Entites;
+using Microsoft.EntityFrameworkCore;
 
 namespace CricketAPI.Helpers
 {
@@ -9,21 +10,15 @@ namespace CricketAPI.Helpers
         {
         }
 
+        public DbSet<Countries> Countries => Set<Countries>();
+        public DbSet<Leagues> Leagues => Set<Leagues>();
+        public DbSet<Seasons> Seasons => Set<Seasons>();
+        public DbSet<Stages> Stages => Set<Stages>();
         public DbSet<Teams> Teams => Set<Teams>();
+        public DbSet<Players> Players => Set<Players>();
+        public DbSet<Venues> Venues => Set<Venues>();
+        public DbSet<Officials> Officials => Set<Officials>();
         public DbSet<Fixtures> Fixtures => Set<Fixtures>();
-
-
-        #region Required
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Fixtures>().OwnsOne(p => p.Localteam);
-            modelBuilder.Entity<Fixtures>().OwnsOne(p => p.Visitorteam);
-            modelBuilder.Entity<Fixtures>().OwnsOne(p => p.Venue);
-            modelBuilder.Entity<Fixtures>().OwnsOne(p => p.Umpires);
-            modelBuilder.Entity<Fixtures>().OwnsOne(p => p.ManOfTheMatch);
-            modelBuilder.Entity<Fixtures>().OwnsOne(p => p.ManOfTheSeries);
-        }
-        #endregion
 
     }
 }
