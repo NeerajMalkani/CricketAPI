@@ -9,6 +9,6 @@ namespace CricketAPI.Entites
         public int continent_id { get; set; }
         public string? name { get; set; }
         public string? image_path { get; set; }
-        public object? updated_at { get; set; }
+        public DateTime updated_at { get; set; }
     }
 }
