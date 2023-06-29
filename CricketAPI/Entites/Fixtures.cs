@@ -101,7 +101,7 @@ namespace CricketAPI
         public string? image_path { get; set; }
     }
 
-    public class Fixtures
+    public class MatchInfo
     {
         [Key]
         public long id { get; set; }
@@ -128,6 +128,23 @@ namespace CricketAPI
         public ManOfTheMatch? man_of_the_match { get; set; }
         public ManOfTheSeries? man_of_the_series { get; set; }
         public int? total_overs_played { get; set; }
+    }
+
+    [Keyless]
+    public class MatchScore
+    {
+        public string? overs { get; set; }
+        public int? score { get; set; }
+        public int? inning { get; set; }
+        public int? team_id { get; set; }
+        public int? wickets { get; set; }
+    }
+
+    [Keyless]
+    public class Fixtures
+    {
+        public MatchInfo? match_info { get; set; }
+        public List<MatchScore>? match_score { get; set; }
     }
 
     public class FixturesJson

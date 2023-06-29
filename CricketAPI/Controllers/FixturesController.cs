@@ -16,7 +16,7 @@ namespace CricketAPI.Controllers
             _db = dbContext;
         }
 
-        #region Get Teams
+        #region Get Fixtures
         [HttpGet]
         [Route("getfixtures")]
         public Response GetFixtures([FromQuery] string type)
