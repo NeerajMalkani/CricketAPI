@@ -20,7 +20,8 @@ namespace CricketAPI.Helpers
         public DbSet<Officials> Officials => Set<Officials>();
         public DbSet<Fixtures> Fixtures => Set<Fixtures>();
 
-        public DbSet<FixturesJson> FixturesJson => Set<FixturesJson>(); 
+        public DbSet<FixturesJson> FixturesJson => Set<FixturesJson>();
+        public DbSet<ScorecardJson> ScorecardJson => Set<ScorecardJson>();
 
     }
 }

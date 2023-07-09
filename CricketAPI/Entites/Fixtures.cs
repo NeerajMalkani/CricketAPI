@@ -3,48 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CricketAPI
 {
-
-    //public class Fixtures
-    //{
-    //    [Key]
-    //    public long id { get; set; }
-    //    public int league_id { get; set; }
-    //    public int season_id { get; set; }
-    //    public int stage_id { get; set; }
-    //    public string? round { get; set; }
-    //    public int localteam_id { get; set; }
-    //    public int visitorteam_id { get; set; }
-    //    public DateTime starting_at { get; set; }
-    //    public string? type { get; set; }
-    //    public bool live { get; set; }
-    //    public string? status { get; set; }
-    //    public string? last_period { get; set; }
-    //    public string? note { get; set; }
-    //    public int venue_id { get; set; }
-    //    public int toss_won_team_id { get; set; }
-    //    public int winner_team_id { get; set; }
-    //    public bool draw_noresult { get; set; }
-    //    public int first_umpire_id { get; set; }
-    //    public int second_umpire_id { get; set; }
-    //    public int tv_umpire_id { get; set; }
-    //    public int referee_id { get; set; }
-    //    public int man_of_match_id { get; set; }
-    //    public int man_of_series_id { get; set; }
-    //    public string? total_overs_played { get; set; }
-    //    public string? elected { get; set; }
-    //    public bool super_over { get; set; }
-    //    public bool follow_on { get; set; }
-    //    public int localteam_dl_datascore { get; set; }
-    //    public int localteam_dl_dataovers { get; set; }
-    //    public int localteam_dl_datawickets_out { get; set; }
-    //    public int visitorteam_dl_datascore { get; set; }
-    //    public int visitorteam_dl_dataovers { get; set; }
-    //    public int visitorteam_dl_datawickets_out { get; set; }
-    //    public int rpc_overs { get; set; }
-    //    public int rpc_target { get; set; }
-    //    public DateTime when_updated { get; set; }
-    //}
-
+    #region Fixtures
     public class Localteam
     {
         [Key]
@@ -152,4 +111,54 @@ namespace CricketAPI
         [Key]
         public string Fixtures { get; set; } = "";
     }
+    #endregion
+
+    #region Scorecard
+    [Keyless]
+    public class Batting
+    {
+        public int? six { get; set; }
+        public int? four { get; set; }
+        public int? score { get; set; }
+        public string? bowler { get; set; }
+        public object? runout { get; set; }
+        public string? batsman { get; set; }
+        public string? image_path { get; set; }
+        public string? catch_stump { get; set; }
+        public int? strike_rate { get; set; }
+    }
+
+    [Keyless]
+    public class Bowling
+    {
+        public double? rate { get; set; }
+        public int? runs { get; set; }
+        public int? wide { get; set; }
+        public double? overs { get; set; }
+        public string? bowler { get; set; }
+        public int? noball { get; set; }
+        public int? medians { get; set; }
+        public int? wickets { get; set; }
+        public string? image_path { get; set; }
+    }
+
+    [Keyless]
+    public class Scorecard
+    {
+        public List<Batting>? batting { get; set; }
+        public List<Bowling>? bowling { get; set; }
+        public int? team_id { get; set; }
+        public string? team_code { get; set; }
+        public string? team_name { get; set; }
+        public string? scoreboard { get; set; }
+        public MatchScore? match_score { get; set; }
+        public string? team_image_path { get; set; }
+    }
+
+    public class ScorecardJson
+    {
+        [Key]
+        public string FixtureScoreboard { get; set; } = "";
+    }
+    #endregion
 }

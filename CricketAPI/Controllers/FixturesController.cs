@@ -41,5 +41,31 @@ namespace CricketAPI.Controllers
             return response;
         }
         #endregion
+
+        #region Get Scorecard
+        [HttpGet]
+        [Route("getscorecard")]
+        public Response GetScorecard([FromQuery] long FixtureID)
+        {
+            Response response = new Response();
+            try
+            {
+                List<Scorecard> scorecard = new FixturesRepository().GetScorecard(_db, FixtureID);
+                if (scorecard.Any())
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, scorecard);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, scorecard);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+        #endregion
     }
 }
