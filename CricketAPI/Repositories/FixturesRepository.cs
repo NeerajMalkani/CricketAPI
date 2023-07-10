@@ -43,16 +43,19 @@ namespace CricketAPI.Repositories
             return fixtures;
         }
 
-        public List<Scorecard> GetScorecard(DataContext context, long fixture_id)
+        public Scoreboard GetScorecard(DataContext context, long fixture_id)
         {
-            List<Scorecard> scorecard = new List<Scorecard>();
+            Scoreboard scorecard = new Scoreboard();
             try
             {
                 List<ScorecardJson> scorecardJson = context.ScorecardJson.FromSqlRaw("CALL `cric_Get_FixtureScorecard`(" + fixture_id + ")").ToList();
                 if (scorecardJson.Count > 0)
                 {
-                    scorecard = JsonConvert.DeserializeObject<List<Scorecard>>(scorecardJson[0].FixtureScoreboard) ?? throw new ArgumentException();
-                    scorecard.RemoveAll(item => item == null);
+                    scorecard = JsonConvert.DeserializeObject<Scoreboard>(scorecardJson[0].FixtureScoreboard) ?? throw new ArgumentException();
+                    if (scorecard != null && scorecard.scorecard != null && scorecard.scorecard.Count > 0)
+                    {
+                        scorecard.scorecard.RemoveAll(item => item == null);
+                    }
                 }
 
             }

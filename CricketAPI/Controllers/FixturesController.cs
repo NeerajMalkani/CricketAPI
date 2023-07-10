@@ -50,15 +50,10 @@ namespace CricketAPI.Controllers
             Response response = new Response();
             try
             {
-                List<Scorecard> scorecard = new FixturesRepository().GetScorecard(_db, fixture_id);
-                if (scorecard.Any())
-                {
-                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, scorecard);
-                }
-                else
-                {
-                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, scorecard);
-                }
+                Scoreboard scorecard = new FixturesRepository().GetScorecard(_db, fixture_id);
+                List<Scoreboard> scores = new List<Scoreboard>();
+                scores.Add(scorecard);
+                Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, scores);
             }
             catch (Exception ex)
             {
