@@ -119,7 +119,8 @@ namespace CricketAPI
     {
         public int? six { get; set; }
         public int? four { get; set; }
-        public int? score { get; set; }
+        public int? runs { get; set; }
+        public int? balls { get; set; }
         public string? bowler { get; set; }
         public object? runout { get; set; }
         public string? batsman { get; set; }

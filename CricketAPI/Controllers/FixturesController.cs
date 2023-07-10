@@ -45,12 +45,12 @@ namespace CricketAPI.Controllers
         #region Get Scorecard
         [HttpGet]
         [Route("getscorecard")]
-        public Response GetScorecard([FromQuery] long FixtureID)
+        public Response GetScorecard([FromQuery] long fixture_id)
         {
             Response response = new Response();
             try
             {
-                List<Scorecard> scorecard = new FixturesRepository().GetScorecard(_db, FixtureID);
+                List<Scorecard> scorecard = new FixturesRepository().GetScorecard(_db, fixture_id);
                 if (scorecard.Any())
                 {
                     Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, scorecard);

@@ -6,7 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<DataContext>(
             dbContextOptions => dbContextOptions
-                .UseMySql(new MySqlConnection(builder.Configuration["ConnectionStrings:Default"]), new MySqlServerVersion(new Version(8, 0, 31)))
+                .UseMySql(new MySqlConnection(builder.Configuration["ConnectionStrings:Default"]), new MySqlServerVersion(new Version(8, 0, 31)), options => options.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: System.TimeSpan.FromSeconds(30),
+                    errorNumbersToAdd: null)
+                )
                 .LogTo(Console.WriteLine, LogLevel.Information)
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
