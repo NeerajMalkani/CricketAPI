@@ -6,6 +6,7 @@ namespace CricketAPI.Repositories
 {
     public class FixturesRepository
     {
+        #region Fixtures
         public List<Fixtures> GetFixtures(DataContext context, string type)
         {
             List<Fixtures> fixtures = new List<Fixtures>();
@@ -43,7 +44,27 @@ namespace CricketAPI.Repositories
             return fixtures;
         }
 
-        public Scoreboard GetScorecard(DataContext context, long fixture_id)
+        public List<Fixtures> GetFixtureByID(DataContext context, long fixture_id)
+        {
+            List<Fixtures> fixtures = new List<Fixtures>();
+            try
+            {
+                List<FixturesJson> fixturesUpcomingJson = context.FixturesJson.FromSqlRaw("CALL `cric_Get_FixtureByID`(" + fixture_id + ")").ToList();
+                if (!fixturesUpcomingJson[0].Fixtures.Equals("[]"))
+                {
+                    fixtures = JsonConvert.DeserializeObject<List<Fixtures>>(fixturesUpcomingJson[0].Fixtures) ?? throw new ArgumentException();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return fixtures;
+        }
+        #endregion
+
+        #region Scorecard
+        public Scoreboard? GetScorecard(DataContext context, long fixture_id)
         {
             Scoreboard scorecard = new Scoreboard();
             try
@@ -65,5 +86,6 @@ namespace CricketAPI.Repositories
             }
             return scorecard;
         }
+        #endregion
     }
 }

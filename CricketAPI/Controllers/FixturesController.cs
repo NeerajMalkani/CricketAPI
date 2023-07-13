@@ -40,6 +40,30 @@ namespace CricketAPI.Controllers
             }
             return response;
         }
+
+        [HttpGet]
+        [Route("getfixturebyid")]
+        public Response GetFixtureByID([FromQuery] long fixture_id)
+        {
+            Response response = new Response();
+            try
+            {
+                List<Fixtures> fixtures = new FixturesRepository().GetFixtureByID(_db, fixture_id);
+                if (fixtures.Any())
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, fixtures);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, fixtures);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
         #endregion
 
         #region Get Scorecard
@@ -50,9 +74,12 @@ namespace CricketAPI.Controllers
             Response response = new Response();
             try
             {
-                Scoreboard scorecard = new FixturesRepository().GetScorecard(_db, fixture_id);
+                Scoreboard? scorecard = new FixturesRepository().GetScorecard(_db, fixture_id);
                 List<Scoreboard> scores = new List<Scoreboard>();
-                scores.Add(scorecard);
+                if (scorecard != null)
+                {
+                    scores.Add(scorecard);
+                }
                 Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, scores);
             }
             catch (Exception ex)
@@ -61,6 +88,10 @@ namespace CricketAPI.Controllers
             }
             return response;
         }
+        #endregion
+
+        #region Get Team Lineup
+
         #endregion
     }
 }
