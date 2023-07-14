@@ -87,5 +87,26 @@ namespace CricketAPI.Repositories
             return scorecard;
         }
         #endregion
+
+        #region Lineup
+        public FixturesTeamLineup? GetLineup(DataContext context, long fixture_id)
+        {
+            FixturesTeamLineup fixturesTeamLineup = new FixturesTeamLineup();
+            try
+            {
+                List<LineupJson> lineupJson = context.LineupJson.FromSqlRaw("CALL `cric_Get_FixtureLineup`(" + fixture_id + ")").ToList();
+                if (lineupJson.Count > 0)
+                {
+                    fixturesTeamLineup = JsonConvert.DeserializeObject<FixturesTeamLineup>(lineupJson[0].Fixtures_TeamLineup) ?? throw new ArgumentException();
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return fixturesTeamLineup;
+        }
+        #endregion
     }
 }

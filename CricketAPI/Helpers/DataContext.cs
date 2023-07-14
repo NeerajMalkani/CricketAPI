@@ -22,6 +22,7 @@ namespace CricketAPI.Helpers
 
         public DbSet<FixturesJson> FixturesJson => Set<FixturesJson>();
         public DbSet<ScorecardJson> ScorecardJson => Set<ScorecardJson>();
+        public DbSet<LineupJson> LineupJson => Set<LineupJson>();
 
     }
 }

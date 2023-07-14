@@ -91,7 +91,27 @@ namespace CricketAPI.Controllers
         #endregion
 
         #region Get Team Lineup
-
+        [HttpGet]
+        [Route("getlineup")]
+        public Response GetLineup([FromQuery] long fixture_id)
+        {
+            Response response = new Response();
+            try
+            {
+                FixturesTeamLineup? fixturesTeamLineup = new FixturesRepository().GetLineup(_db, fixture_id);
+                List<FixturesTeamLineup> fixturesTeamLineups = new List<FixturesTeamLineup>();
+                if (fixturesTeamLineup != null)
+                {
+                    fixturesTeamLineups.Add(fixturesTeamLineup);
+                }
+                Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, fixturesTeamLineups);
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
         #endregion
     }
 }

@@ -177,4 +177,50 @@ namespace CricketAPI
         public string FixtureScoreboard { get; set; } = "";
     }
     #endregion
+
+    #region Lineup
+    public class Lineup
+    {
+        public int player_id { get; set; }
+        public string? player_dob { get; set; }
+        public string? player_fullname { get; set; }
+        public int? player_position { get; set; }
+        public string? player_image_path { get; set; }
+        public string? player_is_captain { get; set; }
+        public string? player_batting_style { get; set; }
+        public string? player_bowling_style { get; set; }
+        public string? player_position_name { get; set; }
+        public string? player_is_wicket_keeper { get; set; }
+    }
+
+    public class Teamlineup
+    {
+        public List<Lineup>? team { get; set; }
+        public int team_id { get; set; }
+        public string? team_code { get; set; }
+        public string? team_name { get; set; }
+        public string? team_image_path { get; set; }
+    }
+
+    public class FixturesTeamLineup
+    {
+        [Key]
+        public long id { get; set; }
+        public string? note { get; set; }
+        public string? type { get; set; }
+        public string? round { get; set; }
+        public string? status { get; set; }
+        public string? stage_name { get; set; }
+        public string? league_name { get; set; }
+        public string? season_name { get; set; }
+        public DateTime? starting_at { get; set; }
+        public List<Teamlineup>? teamlineup { get; set; }
+    }
+
+    public class LineupJson
+    {
+        [Key]
+        public string Fixtures_TeamLineup { get; set; } = "";
+    }
+    #endregion
 }
