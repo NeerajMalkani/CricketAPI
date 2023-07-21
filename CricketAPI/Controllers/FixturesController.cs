@@ -1,4 +1,5 @@
-﻿using CricketAPI.Helpers;
+﻿using CricketAPI.Entites;
+using CricketAPI.Helpers;
 using CricketAPI.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -105,6 +106,30 @@ namespace CricketAPI.Controllers
                     fixturesTeamLineups.Add(fixturesTeamLineup);
                 }
                 Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, fixturesTeamLineups);
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+        #endregion
+
+        #region Get Balls
+        [HttpGet]
+        [Route("getballs")]
+        public Response GetBalls([FromQuery] long fixture_id, string innings_id)
+        {
+            Response response = new Response();
+            try
+            {
+                Fixtures_Balls? fixturesBalls = new FixturesRepository().GetBalls(_db, fixture_id, innings_id);
+                List<Fixtures_Balls> fixturesBallsLst = new List<Fixtures_Balls>();
+                if (fixturesBalls != null)
+                {
+                    fixturesBallsLst.Add(fixturesBalls);
+                }
+                Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, fixturesBallsLst);
             }
             catch (Exception ex)
             {
