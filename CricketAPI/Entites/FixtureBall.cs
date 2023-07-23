@@ -55,20 +55,37 @@ namespace CricketAPI.Entites
         public string? image_path { get; set; }
     }
 
-    [Keyless]
-    public class Fixtures_Balls
+    public class FixturesBalls
     {
+        [Key]
+        public int ball_id { get; set; }
         public string? ball { get; set; }
         public Team? team { get; set; }
         public Score? score { get; set; }
         public Bowler? bowler { get; set; }
-        public int? ball_id { get; set; }
-        public int? catch_by { get; set; }
-        public int? run_out_by { get; set; }
+        public string? catch_by { get; set; }
+        public string? run_out_by { get; set; }
         public string? scoreboard { get; set; }
-        public int? batsman_out { get; set; }
+        public string? batsman_out { get; set; }
         public BatsmanStrike? batsman_strike { get; set; }
         public BatsmanNonstrike? batsman_nonstrike { get; set; }
+    }
+
+    
+    public class Fixtures_Balls
+    {
+
+        [Key]
+        public long id { get; set; }
+        public string? note { get; set; }
+        public string? type { get; set; }
+        public string? round { get; set; }
+        public string? status { get; set; }
+        public string? stage_name { get; set; }
+        public string? league_name { get; set; }
+        public string? season_name { get; set; }
+        public DateTime? starting_at { get; set; }
+        public List<FixturesBalls>? balls { get; set; }
     }
 
     public class BallJson
