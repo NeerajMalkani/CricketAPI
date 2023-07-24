@@ -125,7 +125,8 @@ namespace CricketAPI
         public int? six { get; set; }
         public int? strike_rate { get; set; }
         public string? bowler { get; set; }
-        public object? runout { get; set; }
+        public string? runout { get; set; }
+        public string? how_out { get; set; }
         public string? catch_stump { get; set; }
     }
 
