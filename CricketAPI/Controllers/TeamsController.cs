@@ -5,7 +5,7 @@ using System.Net;
 
 namespace CricketAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/teams")]
     [ApiController]
     public class TeamsController : ControllerBase
     {
@@ -18,7 +18,7 @@ namespace CricketAPI.Controllers
 
         #region Get Teams
         [HttpGet]
-        [Route("getteams")]
+        [Route("list")]
         public Response GetTeams()
         {
             Response response = new Response();

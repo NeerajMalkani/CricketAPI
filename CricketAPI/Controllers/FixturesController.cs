@@ -1,12 +1,11 @@
-﻿using CricketAPI.Entites;
-using CricketAPI.Helpers;
+﻿using CricketAPI.Helpers;
 using CricketAPI.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace CricketAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/fixtures")]
     [ApiController]
     public class FixturesController : ControllerBase
     {
@@ -19,7 +18,7 @@ namespace CricketAPI.Controllers
 
         #region Get Fixtures
         [HttpGet]
-        [Route("getfixtures")]
+        [Route("list")]
         public Response GetFixtures([FromQuery] string type)
         {
             Response response = new Response();
@@ -28,6 +27,7 @@ namespace CricketAPI.Controllers
                 List<Fixtures> fixtures = new FixturesRepository().GetFixtures(_db, type);
                 if (fixtures.Any())
                 {
+                    fixtures = type == "upcoming" ? fixtures.OrderBy(fix => fix.match_info?.starting_at).Take(12).ToList() : fixtures.OrderByDescending(fix => fix.match_info?.starting_at).Take(12).ToList();
                     Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, fixtures);
                 }
                 else
@@ -43,7 +43,7 @@ namespace CricketAPI.Controllers
         }
 
         [HttpGet]
-        [Route("getfixturebyid")]
+        [Route("info")]
         public Response GetFixtureByID([FromQuery] long fixture_id)
         {
             Response response = new Response();
@@ -69,7 +69,7 @@ namespace CricketAPI.Controllers
 
         #region Get Scorecard
         [HttpGet]
-        [Route("getscorecard")]
+        [Route("scorecard")]
         public Response GetScorecard([FromQuery] long fixture_id)
         {
             Response response = new Response();
@@ -93,7 +93,7 @@ namespace CricketAPI.Controllers
 
         #region Get Team Lineup
         [HttpGet]
-        [Route("getlineup")]
+        [Route("lineup")]
         public Response GetLineup([FromQuery] long fixture_id)
         {
             Response response = new Response();
@@ -117,7 +117,7 @@ namespace CricketAPI.Controllers
 
         #region Get Balls
         [HttpGet]
-        [Route("getballs")]
+        [Route("balls")]
         public Response GetBalls([FromQuery] long fixture_id, string innings_id)
         {
             Response response = new Response();
