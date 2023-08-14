@@ -13,7 +13,35 @@ namespace CricketAPI.Repositories
             }
             catch (Exception)
             {
-                throw;
+                teams = new List<Teams>();
+            }
+            return teams;
+        }
+
+        public List<Teams> GetTeamInfo(DataContext context, long id)
+        {
+            List<Teams> teams = new List<Teams>();
+            try
+            {
+                teams = context.Teams.Where(t => t.id == id).ToList();
+            }
+            catch (Exception)
+            {
+                teams = new List<Teams>();
+            }
+            return teams;
+        }
+
+        public List<Teams> GetSearchTeam(DataContext context, string teamname)
+        {
+            List<Teams> teams = new List<Teams>();
+            try
+            {
+                teams = context.Teams.Where(t => (t.name != null && t.name.Contains(teamname))).ToList();
+            }
+            catch (Exception)
+            {
+                teams = new List<Teams>();
             }
             return teams;
         }

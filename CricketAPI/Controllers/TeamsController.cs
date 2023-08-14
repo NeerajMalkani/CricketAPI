@@ -40,6 +40,54 @@ namespace CricketAPI.Controllers
             }
             return response;
         }
+
+        [HttpGet]
+        [Route("info")]
+        public Response GetTeamInfo(long id)
+        {
+            Response response = new Response();
+            try
+            {
+                List<Teams> teams = new TeamsRepository().GetTeamInfo(_db, id);
+                if (teams.Any())
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, teams);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, teams);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+
+        [HttpGet]
+        [Route("search")]
+        public Response GetSearchTeam(string team_name)
+        {
+            Response response = new Response();
+            try
+            {
+                List<Teams> teams = new TeamsRepository().GetSearchTeam(_db, team_name);
+                if (teams.Any())
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, teams);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, teams);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
         #endregion
     }
 }

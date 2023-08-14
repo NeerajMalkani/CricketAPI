@@ -21,7 +21,7 @@ namespace CricketAPI.Repositories
             }
             catch (Exception)
             {
-                throw;
+                news = new List<News>();
             }
             return news;
         }

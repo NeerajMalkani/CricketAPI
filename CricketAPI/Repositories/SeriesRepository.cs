@@ -39,9 +39,55 @@ namespace CricketAPI.Repositories
             }
             catch (Exception)
             {
-                throw;
+                fixtures = new List<Fixtures>();
             }
             return fixtures;
+        }
+
+        public List<Standings> GetStandings(DataContext context, long series_id)
+        {
+            List<Standings> standingsLst = new List<Standings>();
+            try
+            {
+                List<StandingsJson> standingsJson = context.StandingsJson.FromSqlRaw("CALL `cric_Get_SeriesStandings`(" + series_id + ")").ToList();
+                if (standingsJson.Count > 0)
+                {
+                    Standings standingsObj = JsonConvert.DeserializeObject<Standings>(standingsJson[0].Standings) ?? throw new ArgumentException();
+                    if(standingsObj != null)
+                    {
+                        standingsLst.Add(standingsObj);
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                standingsLst = new List<Standings>();
+            }
+            return standingsLst;
+        }
+
+        public List<SeriesTeams> GetSeriesTeams(DataContext context, long series_id)
+        {
+            List<SeriesTeams> teamsLst = new List<SeriesTeams>();
+            try
+            {
+                List<SeriesTeamsJson> seriesTeamJson = context.SeriesTeamsJson.FromSqlRaw("CALL `cric_Get_SeriesTeams`(" + series_id + ")").ToList();
+                if (seriesTeamJson.Count > 0)
+                {
+                    SeriesTeams teamObj = JsonConvert.DeserializeObject<SeriesTeams>(seriesTeamJson[0].SeriesTeams) ?? throw new ArgumentException();
+                    if (teamObj != null)
+                    {
+                        teamsLst.Add(teamObj);
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                teamsLst = new List<SeriesTeams>();
+            }
+            return teamsLst;
         }
     }
 }

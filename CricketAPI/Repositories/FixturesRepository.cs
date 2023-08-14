@@ -40,7 +40,7 @@ namespace CricketAPI.Repositories
             }
             catch (Exception)
             {
-                throw;
+                fixtures = new List<Fixtures>();
             }
             return fixtures;
         }
@@ -58,7 +58,7 @@ namespace CricketAPI.Repositories
             }
             catch (Exception)
             {
-                throw;
+                fixtures = new List<Fixtures>();
             }
             return fixtures;
         }
@@ -83,7 +83,7 @@ namespace CricketAPI.Repositories
             }
             catch (Exception)
             {
-                throw;
+                scorecard = new Scoreboard();
             }
             return scorecard;
         }
@@ -104,7 +104,7 @@ namespace CricketAPI.Repositories
             }
             catch (Exception)
             {
-                throw;
+                fixturesTeamLineup = new FixturesTeamLineup();
             }
             return fixturesTeamLineup;
         }
@@ -125,7 +125,7 @@ namespace CricketAPI.Repositories
             }
             catch (Exception)
             {
-                throw;
+                fixturesBalls = new Fixtures_Balls();
             }
             return fixturesBalls;
         }

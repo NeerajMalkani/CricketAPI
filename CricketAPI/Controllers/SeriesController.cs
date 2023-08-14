@@ -69,5 +69,58 @@ namespace CricketAPI.Controllers
             return response;
         }
         #endregion
+
+        #region Series Standings
+        [HttpGet]
+        [Route("standings")]
+        public Response GetStandings(long series_id)
+        {
+            Response response = new Response();
+            try
+            {
+                List<Standings> standings = new SeriesRepository().GetStandings(_db, series_id);
+                if (standings.Any())
+                {
+                    standings[0].standings = standings[0]?.standings?.OrderBy(sta => sta.position).ToList();
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, standings);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, standings);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+        #endregion
+
+        #region Series Teams
+        [HttpGet]
+        [Route("teams")]
+        public Response GetSeriesTeams(long series_id)
+        {
+            Response response = new Response();
+            try
+            {
+                List<SeriesTeams> seriesTeams = new SeriesRepository().GetSeriesTeams(_db, series_id);
+                if (seriesTeams.Any())
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, seriesTeams);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, seriesTeams);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+        #endregion
     }
 }

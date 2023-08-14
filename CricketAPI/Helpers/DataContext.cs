@@ -25,6 +25,11 @@ namespace CricketAPI.Helpers
         public DbSet<LineupJson> LineupJson => Set<LineupJson>();
         public DbSet<BallJson> BallJson => Set<BallJson>();
         public DbSet<SeriesJson> SeriesJson => Set<SeriesJson>();
+        public DbSet<StandingsJson> StandingsJson => Set<StandingsJson>();
+        public DbSet<SeriesTeamsJson> SeriesTeamsJson => Set<SeriesTeamsJson>();
+        public DbSet<ICCRankingsJson> ICCRankingsJson => Set<ICCRankingsJson>();
+        public DbSet<PlayerBattingStatsJson> PlayerBattingStatsJson => Set<PlayerBattingStatsJson>();
+        public DbSet<PlayerBowlingStatsJson> PlayerBowlingStatsJson => Set<PlayerBowlingStatsJson>();
         public DbSet<NewsJson> NewsJson => Set<NewsJson>();
 
     }
