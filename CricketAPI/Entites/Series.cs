@@ -7,6 +7,7 @@ namespace CricketAPI.Entites
     {
         [Key]
         public long id { get; set; }
+
         public long? league_id { get; set; }
         public string? image_path { get; set; }
         public string? league_type { get; set; }
@@ -43,7 +44,6 @@ namespace CricketAPI.Entites
         public double? netto_run_rate { get; set; }       
         public string? legend_description { get; set; }
     }
-
     public class Standings
     {
         public int id { get; set; }
@@ -51,9 +51,9 @@ namespace CricketAPI.Entites
         public string? image_path { get; set; }
         public string? league_type { get; set; }
         public string? series_name { get; set; }
+        public string? season_name { get; set; }
         public List<Standing>? standings { get; set; }
     }
-
     public class StandingsJson
     {
         [Key]

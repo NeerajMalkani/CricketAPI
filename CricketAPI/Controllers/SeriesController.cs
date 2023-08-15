@@ -47,12 +47,12 @@ namespace CricketAPI.Controllers
         #region Get Series Fixtures
         [HttpGet]
         [Route("fixtures")]
-        public Response GetSeriesFixtures([FromQuery] long series_id, string type)
+        public Response GetSeriesFixtures([FromQuery] long series_id)
         {
             Response response = new Response();
             try
             {
-                List<Fixtures> fixtures = new SeriesRepository().GetSeriesFixtures(_db, series_id, type);
+                List<Fixtures> fixtures = new SeriesRepository().GetSeriesFixtures(_db, series_id);
                 if (fixtures.Any())
                 {
                     Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, fixtures);

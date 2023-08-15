@@ -26,12 +26,12 @@ namespace CricketAPI.Repositories
             return seriesLst;
         }
 
-        public List<Fixtures> GetSeriesFixtures(DataContext context, long series_id, string type)
+        public List<Fixtures> GetSeriesFixtures(DataContext context, long series_id)
         {
             List<Fixtures> fixtures = new List<Fixtures>();
             try
             {
-                List<FixturesJson> fixturesJson = context.FixturesJson.FromSqlRaw("CALL `cric_Get_SeriesFixtures`(" + series_id + ", '" + type + "')").ToList();
+                List<FixturesJson> fixturesJson = context.FixturesJson.FromSqlRaw("CALL `cric_Get_SeriesFixtures`(" + series_id + ")").ToList();
                 if (!fixturesJson[0].Fixtures.Equals("[]"))
                 {
                     fixtures = JsonConvert.DeserializeObject<List<Fixtures>>(fixturesJson[0].Fixtures) ?? throw new ArgumentException();

@@ -12,7 +12,6 @@ namespace CricketAPI
         public string? name { get; set; }
         public string? image_path { get; set; }
     }
-
     public class Visitorteam
     {
         [Key]
@@ -21,7 +20,6 @@ namespace CricketAPI
         public string? name { get; set; }
         public string? image_path { get; set; }
     }
-
     public class ManOfTheMatch
     {
         [Key]
@@ -29,7 +27,6 @@ namespace CricketAPI
         public string? name { get; set; }
         public string? image_path { get; set; }
     }
-
     public class ManOfTheSeries
     {
         [Key]
@@ -37,7 +34,6 @@ namespace CricketAPI
         public string? name { get; set; }
         public string? image_path { get; set; }
     }
-
     public class Umpires
     {
         [Key]
@@ -47,7 +43,6 @@ namespace CricketAPI
         public string? first_umpire { get; set; }
         public string? second_umpire { get; set; }
     }
-
     public class Venue
     {
         [Key]
@@ -59,11 +54,12 @@ namespace CricketAPI
         public string? floodlight { get; set; }
         public string? image_path { get; set; }
     }
-
     public class MatchInfo
     {
         [Key]
         public long id { get; set; }
+        public long series_id { get; set; }
+        public long league_id { get; set; }
         public string? league_name { get; set; }
         public string? season_name { get; set; }
         public string? stage_name { get; set; }
@@ -77,8 +73,8 @@ namespace CricketAPI
         public string? status { get; set; }
         public string? elected { get; set; }
         public string? starting_at { get; set; }
-        public int? rpc_overs { get; set; }
-        public int? rpc_target { get; set; }
+        public string? rpc_overs { get; set; }
+        public string? rpc_target { get; set; }
         public string? follow_on { get; set; }
         public string? super_over { get; set; }
         public string? draw_noresult { get; set; }
@@ -88,7 +84,6 @@ namespace CricketAPI
         public ManOfTheSeries? man_of_the_series { get; set; }
         public int? total_overs_played { get; set; }
     }
-
     [Keyless]
     public class MatchScore
     {
@@ -98,14 +93,12 @@ namespace CricketAPI
         public int? team_id { get; set; }
         public int? wickets { get; set; }
     }
-
     [Keyless]
     public class Fixtures
     {
         public MatchInfo? match_info { get; set; }
         public List<MatchScore>? match_score { get; set; }
     }
-
     public class FixturesJson
     {
         [Key]
@@ -129,7 +122,6 @@ namespace CricketAPI
         public string? how_out { get; set; }
         public string? catch_stump { get; set; }
     }
-
     [Keyless]
     public class Bowling
     {
@@ -143,7 +135,6 @@ namespace CricketAPI
         public int? wide { get; set; }
         public int? noball { get; set; } 
     }
-
     [Keyless]
     public class Scorecard
     {
@@ -156,11 +147,12 @@ namespace CricketAPI
         public List<Batting>? batting { get; set; }
         public List<Bowling>? bowling { get; set; }
     }
-
     public class Scoreboard
     {
         [Key]
         public long id { get; set; }
+        public long series_id { get; set; }
+        public long league_id { get; set; }
         public string? note { get; set; }
         public string? type { get; set; }
         public string? round { get; set; }
@@ -171,7 +163,6 @@ namespace CricketAPI
         public DateTime? starting_at { get; set; }
         public List<Scorecard>? scorecard { get; set; }
     }
-
     public class ScorecardJson
     {
         [Key]
@@ -193,7 +184,6 @@ namespace CricketAPI
         public string? player_position_name { get; set; }
         public string? player_is_wicket_keeper { get; set; }
     }
-
     public class Teamlineup
     {
         public List<Lineup>? team { get; set; }
@@ -202,11 +192,12 @@ namespace CricketAPI
         public string? team_name { get; set; }
         public string? team_image_path { get; set; }
     }
-
     public class FixturesTeamLineup
     {
         [Key]
         public long id { get; set; }
+        public long series_id { get; set; }
+        public long league_id { get; set; }
         public string? note { get; set; }
         public string? type { get; set; }
         public string? round { get; set; }
@@ -217,7 +208,6 @@ namespace CricketAPI
         public DateTime? starting_at { get; set; }
         public List<Teamlineup>? teamlineup { get; set; }
     }
-
     public class LineupJson
     {
         [Key]
@@ -234,7 +224,6 @@ namespace CricketAPI
         public string? position { get; set; }
         public string? image_path { get; set; }
     }
-
     [Keyless]
     public class BatsmanStrike
     {
@@ -243,7 +232,6 @@ namespace CricketAPI
         public string? position { get; set; }
         public string? image_path { get; set; }
     }
-
     [Keyless]
     public class Bowler
     {
@@ -252,7 +240,6 @@ namespace CricketAPI
         public string? position { get; set; }
         public string? image_path { get; set; }
     }
-
     [Keyless]
     public class Score
     {
@@ -268,7 +255,6 @@ namespace CricketAPI
         public string? is_wicket { get; set; }
         public int? noball_runs { get; set; }
     }
-
     [Keyless]
     public class Team
     {
@@ -277,11 +263,9 @@ namespace CricketAPI
         public string? name { get; set; }
         public string? image_path { get; set; }
     }
-
     public class FixturesBalls
     {
-        [Key]
-        public int ball_id { get; set; }
+        public int? ball_id { get; set; }
         public string? ball { get; set; }
         public Team? team { get; set; }
         public Score? score { get; set; }
@@ -293,13 +277,13 @@ namespace CricketAPI
         public BatsmanStrike? batsman_strike { get; set; }
         public BatsmanNonstrike? batsman_nonstrike { get; set; }
     }
-
-
     public class Fixtures_Balls
     {
 
         [Key]
         public long id { get; set; }
+        public long? series_id { get; set; }
+        public long? league_id { get; set; }
         public string? note { get; set; }
         public string? type { get; set; }
         public string? round { get; set; }
@@ -310,7 +294,6 @@ namespace CricketAPI
         public DateTime? starting_at { get; set; }
         public List<FixturesBalls>? balls { get; set; }
     }
-
     public class BallJson
     {
         [Key]
