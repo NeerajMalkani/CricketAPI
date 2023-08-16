@@ -51,7 +51,7 @@ namespace CricketAPI.Controllers
                             int? remaining_overs = (fixture.match_info?.total_overs_played * 6) - current_overs;
                             if (fixture.match_info != null)
                             {
-                                if (remaining_score > 0)
+                                if (remaining_score > 0 && remaining_overs > 0)
                                 {
                                     fixture.match_info.rpc_target = Math.Round((Convert.ToDecimal(remaining_score) / Convert.ToDecimal(remaining_overs)) * 6, 2).ToString();
                                 }
@@ -110,7 +110,7 @@ namespace CricketAPI.Controllers
                                 int? remaining_overs = (fixture.match_info?.total_overs_played * 6) - current_overs;
                                 if (fixture.match_info != null)
                                 {
-                                    if (remaining_score > 0)
+                                    if (remaining_score > 0 && remaining_overs > 0)
                                     {
                                         fixture.match_info.rpc_target = Math.Round((Convert.ToDecimal(remaining_score) / Convert.ToDecimal(remaining_overs)) * 6, 2).ToString();
                                     }
