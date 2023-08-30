@@ -32,5 +32,7 @@ namespace CricketAPI.Helpers
         public DbSet<PlayerBowlingStatsJson> PlayerBowlingStatsJson => Set<PlayerBowlingStatsJson>();
         public DbSet<NewsJson> NewsJson => Set<NewsJson>();
 
+        public DbSet<YouTubeVideos> YouTubeVideos => Set<YouTubeVideos>();
+
     }
 }
