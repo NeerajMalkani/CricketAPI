@@ -21,12 +21,12 @@ namespace CricketAPI.Controllers
         #region Insert Youtube videos
         [HttpPost]
         [Route("insert")]
-        public Response InsertYoutubeVideos([FromQuery] YouTubeVideos youTubeVideos)
+        public async Task<Response> InsertYoutubeVideosAsync([FromQuery] YouTubeVideos youTubeVideos)
         {
             Response response = new Response();
             try
             {
-                int rowsAffected = new YouTubeRepository().InsertYoutubeVideos(_db, youTubeVideos);
+                int rowsAffected = await new YouTubeRepository().InsertYoutubeVideos(_db, youTubeVideos);
                 if (rowsAffected > 0)
                 {
                     Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response);
@@ -66,6 +66,31 @@ namespace CricketAPI.Controllers
             }
             return response;
         }
+
+        [HttpDelete]
+        [Route("delete")]
+        public async Task<Response> DeleteYoutubeVideosAsync([FromQuery] YouTubeVideos youTubeVideos)
+        {
+            Response response = new Response();
+            try
+            {
+                int rowsAffected = await new YouTubeRepository().DeleteYoutubeVideos(_db, youTubeVideos);
+                if (rowsAffected > 0)
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+
         #endregion
     }
 }
