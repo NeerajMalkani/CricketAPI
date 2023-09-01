@@ -21,7 +21,7 @@ namespace CricketAPI.Controllers
         #region Insert Youtube videos
         [HttpPost]
         [Route("insert")]
-        public async Task<Response> InsertYoutubeVideosAsync([FromQuery] YouTubeVideos youTubeVideos)
+        public async Task<Response> InsertYoutubeVideosAsync([FromBody] YouTubeVideos youTubeVideos)
         {
             Response response = new Response();
             try
