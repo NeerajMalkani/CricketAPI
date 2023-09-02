@@ -13,6 +13,6 @@ namespace CricketAPI.Entites
         public string? thumbnail { get; set; }
         public string? lengthSeconds { get; set; }
         public string? viewCount { get; set; }
-        public DateTime? creationTime { get; set; }
+        public DateTime? creationTime { get; set; } = DateTime.UtcNow;
     }
 }
