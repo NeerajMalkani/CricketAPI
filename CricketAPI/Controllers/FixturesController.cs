@@ -41,7 +41,7 @@ namespace CricketAPI.Controllers
                                 fixture.match_info.rpc_overs = Math.Round((Convert.ToDecimal(score) / Convert.ToDecimal(over)) * 6, 2).ToString();
                             }
                         }
-                        if (fixture.match_info?.note?.Contains("Target") == true)
+                        if (fixture.match_info?.note?.Contains("Target") == true && (fixture.match_score?.Count > 1 && Convert.ToDouble(fixture.match_score?[fixture.match_score.Count - 1].overs) > 0))
                         {
                             int target = Convert.ToInt16(Regex.Match(fixture.match_info.note, @"\d+").Value);
                             int? current_score = fixture.match_score?[fixture.match_score.Count - 1].score;
@@ -100,7 +100,7 @@ namespace CricketAPI.Controllers
                             {
                                 fixture.match_info.rpc_overs = Math.Round((Convert.ToDecimal(score) / Convert.ToDecimal(over)) * 6, 2).ToString();
                             }
-                            if (fixture.match_info?.note?.Contains("Target") == true)
+                            if (fixture.match_info?.note?.Contains("Target") == true && (fixture.match_score?.Count > 1 && Convert.ToDouble(fixture.match_score?[fixture.match_score.Count - 1].overs) > 0))
                             {
                                 int target = Convert.ToInt16(Regex.Match(fixture.match_info.note, @"\d+").Value);
                                 int? current_score = fixture.match_score?[fixture.match_score.Count - 1].score;
