@@ -26,7 +26,7 @@ namespace CricketAPI.Repositories
             List<YouTubeVideos> youTubeVideos = new List<YouTubeVideos>();
             try
             {
-                youTubeVideos = context.YouTubeVideos.ToList();
+                youTubeVideos = context.YouTubeVideos.OrderByDescending(b => b.creationTime).ToList();
             }
             catch (Exception)
             {
