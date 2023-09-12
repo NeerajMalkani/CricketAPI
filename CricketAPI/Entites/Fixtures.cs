@@ -173,7 +173,7 @@ namespace CricketAPI
     #region Lineup
     public class Lineup
     {
-        public int player_id { get; set; }
+        public long player_id { get; set; }
         public string? player_dob { get; set; }
         public string? player_fullname { get; set; }
         public int? player_position { get; set; }
