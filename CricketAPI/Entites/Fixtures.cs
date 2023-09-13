@@ -116,7 +116,7 @@ namespace CricketAPI
         public int? balls { get; set; }
         public int? four { get; set; }
         public int? six { get; set; }
-        public int? strike_rate { get; set; }
+        public decimal? strike_rate { get; set; }
         public string? bowler { get; set; }
         public string? runout { get; set; }
         public string? how_out { get; set; }
@@ -133,7 +133,7 @@ namespace CricketAPI
         public int? wickets { get; set; }
         public double? rate { get; set; }
         public int? wide { get; set; }
-        public int? noball { get; set; } 
+        public int? noball { get; set; }
     }
     [Keyless]
     public class Scorecard
@@ -277,6 +277,14 @@ namespace CricketAPI
         public BatsmanStrike? batsman_strike { get; set; }
         public BatsmanNonstrike? batsman_nonstrike { get; set; }
     }
+
+
+
+    public class Miniscore
+    {
+        public List<Batting>? batting { get; set; }
+        public List<Bowling>? bowling { get; set; }
+    }
     public class Fixtures_Balls
     {
 
@@ -293,6 +301,7 @@ namespace CricketAPI
         public string? season_name { get; set; }
         public DateTime? starting_at { get; set; }
         public List<FixturesBalls>? balls { get; set; }
+        public Miniscore? miniscore { get; set; }
     }
     public class BallJson
     {

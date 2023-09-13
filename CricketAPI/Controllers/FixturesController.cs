@@ -197,12 +197,43 @@ namespace CricketAPI.Controllers
             try
             {
                 Fixtures_Balls? fixturesBalls = new FixturesRepository().GetBalls(_db, fixture_id, innings_id);
-                List<Fixtures_Balls> fixturesBallsLst = new List<Fixtures_Balls>();
                 if (fixturesBalls != null)
                 {
-                    fixturesBallsLst.Add(fixturesBalls);
+                    List<Bowling>? objBowling = new();
+
+                    FixturesBalls? objLastFB = fixturesBalls?.balls?.Last();
+                    string? LastBowlerName = Convert.ToString(objLastFB?.bowler?.name);
+                    decimal LastBall = Convert.ToDecimal(objLastFB?.ball);
+                    Bowling? miniscoreBolwer1 = fixturesBalls?.miniscore?.bowling?.Find(a => a.bowler == LastBowlerName);
+                    if (miniscoreBolwer1 != null)
+                    {
+                        objBowling.Add(miniscoreBolwer1);
+                    }
+
+                    if (LastBall >= 1)
+                    {
+                        FixturesBalls? objSecondLastFB = fixturesBalls?.balls?.Find(e => e.ball == (Convert.ToString(Math.Floor(LastBall) - 1) + ".6"));
+                        string? SecondLastBowlerName = Convert.ToString(objSecondLastFB?.bowler?.name);
+                        Bowling? miniscoreBolwer2 = fixturesBalls?.miniscore?.bowling?.Find(a => a.bowler == SecondLastBowlerName);
+
+                        if (miniscoreBolwer2 != null)
+                        {
+                            objBowling.Add(miniscoreBolwer2);
+                        }
+                    }
+                    fixturesBalls.miniscore.bowling = objBowling;
+
+                    List<Fixtures_Balls> fixturesBallsLst = new List<Fixtures_Balls>();
+                    if (fixturesBalls != null)
+                    {
+                        fixturesBallsLst.Add(fixturesBalls);
+                    }
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, fixturesBallsLst);
                 }
-                Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, fixturesBallsLst);
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "No data", out response);
+                }
             }
             catch (Exception ex)
             {

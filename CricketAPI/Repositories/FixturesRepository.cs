@@ -116,7 +116,7 @@ namespace CricketAPI.Repositories
             Fixtures_Balls fixturesBalls = new Fixtures_Balls();
             try
             {
-                List<BallJson> ballJson = context.BallJson.FromSqlRaw("CALL `cric_Get_FixtureBall`(" + fixture_id + ", '" + innings_id + "')").ToList();
+                List<BallJson> ballJson = context.BallJson.FromSqlRaw("CALL `cric_Get_FixtureBall_v1`(" + fixture_id + ", '" + innings_id + "')").ToList();
                 if (ballJson.Count > 0 )
                 {
                     fixturesBalls = JsonConvert.DeserializeObject<Fixtures_Balls>(ballJson[0].Fixtures_Balls) ?? throw new ArgumentException();
