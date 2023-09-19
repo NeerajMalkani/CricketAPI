@@ -274,20 +274,26 @@ namespace CricketAPI
         public string? run_out_by { get; set; }
         public string? scoreboard { get; set; }
         public string? batsman_out { get; set; }
+        public int? total_score { get; set; }
+        public int? over_score { get; set; }
+        public int? total_wickets { get; set; }
         public BatsmanStrike? batsman_strike { get; set; }
         public BatsmanNonstrike? batsman_nonstrike { get; set; }
     }
-
-
-
     public class Miniscore
     {
         public List<Batting>? batting { get; set; }
         public List<Bowling>? bowling { get; set; }
     }
+    public class LastWicket
+    {
+        public string? playerName { get; set; }
+        public int? score { get; set; }
+        public string? overNumber { get; set; }
+        public int? wicketNumber { get; set; }
+    }
     public class Fixtures_Balls
     {
-
         [Key]
         public long id { get; set; }
         public long? series_id { get; set; }
@@ -299,9 +305,18 @@ namespace CricketAPI
         public string? stage_name { get; set; }
         public string? league_name { get; set; }
         public string? season_name { get; set; }
+        public string? rpc_overs { get; set; }
+        public string? rpc_target { get; set; }
+        public int? total_overs_played { get; set; }
         public DateTime? starting_at { get; set; }
-        public List<FixturesBalls>? balls { get; set; }
+        public Localteam? localteam { get; set; }
+        public Visitorteam? visitorteam { get; set; }
+        public List<MatchScore>? match_score { get; set; }
         public Miniscore? miniscore { get; set; }
+        public List<FixturesBalls>? balls { get; set; }
+        public ManOfTheMatch? man_of_the_match { get; set; }
+        public ManOfTheSeries? man_of_the_series { get; set; }
+        public LastWicket? last_wicket { get; set; }
     }
     public class BallJson
     {

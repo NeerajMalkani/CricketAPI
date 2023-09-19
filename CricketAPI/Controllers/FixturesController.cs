@@ -199,6 +199,33 @@ namespace CricketAPI.Controllers
                 Fixtures_Balls? fixturesBalls = new FixturesRepository().GetBalls(_db, fixture_id, innings_id);
                 if (fixturesBalls != null)
                 {
+
+                    int? score = fixturesBalls.match_score?[fixturesBalls.match_score.Count - 1].score;
+                    List<string>? overs = fixturesBalls.match_score?[fixturesBalls.match_score.Count - 1]?.overs?.Split(".").ToList();
+                    int? over = (Convert.ToInt16(overs?[0]) * 6) + (overs != null && overs?.Count > 1 ? Convert.ToInt16(overs?[1]) : 0);
+                    if (fixturesBalls != null)
+                    {
+                        fixturesBalls.rpc_overs = Math.Round((Convert.ToDecimal(score) / Convert.ToDecimal(over)) * 6, 2).ToString();
+                    }
+
+                    if (fixturesBalls?.note?.Contains("Target") == true && (fixturesBalls?.match_score?.Count > 1 && Convert.ToDouble(fixturesBalls?.match_score?[fixturesBalls.match_score.Count - 1].overs) > 0))
+                    {
+                        if (fixturesBalls != null)
+                        {
+                            int target = Convert.ToInt16(Regex.Match(fixturesBalls.note, @"\d+").Value);
+                            int? current_score = fixturesBalls?.match_score?[fixturesBalls.match_score.Count - 1].score;
+                            int? remaining_score = target - current_score;
+                            List<string>? current_overs_lst = fixturesBalls?.match_score?[fixturesBalls.match_score.Count - 1]?.overs?.Split(".").ToList();
+                            int? current_overs = (Convert.ToInt16(current_overs_lst?[0]) * 6) + (current_overs_lst != null && current_overs_lst?.Count > 1 ? Convert.ToInt16(current_overs_lst?[1]) : 0);
+                            int? remaining_overs = (fixturesBalls?.total_overs_played * 6) - current_overs;
+
+                            if (fixturesBalls != null && remaining_score > 0 && remaining_overs > 0)
+                            {
+                                fixturesBalls.rpc_target = Math.Round((Convert.ToDecimal(remaining_score) / Convert.ToDecimal(remaining_overs)) * 6, 2).ToString();
+                            }
+                        }
+                    }
+
                     List<Bowling>? objBowling = new();
 
                     FixturesBalls? objLastFB = fixturesBalls?.balls?.Last();
@@ -221,7 +248,66 @@ namespace CricketAPI.Controllers
                             objBowling.Add(miniscoreBolwer2);
                         }
                     }
-                    fixturesBalls.miniscore.bowling = objBowling;
+                    if (fixturesBalls != null && fixturesBalls.miniscore != null)
+                    {
+                        fixturesBalls.miniscore.bowling = objBowling;
+                    }
+
+                    if (fixturesBalls != null && fixturesBalls.balls != null)
+                    {
+                        string currOver = "0";
+                        int overRuns = 0;
+                        int totalRuns = 0;
+                        int totalWickets = 0;
+                        foreach (FixturesBalls ball in fixturesBalls.balls)
+                        {
+                            string? currBall = ball?.ball;
+                            if (currBall != null)
+                            {
+                                string traverseOver = currBall.Split(".")[0];
+                                if (traverseOver != currOver)
+                                {
+                                    overRuns = 0;
+                                    currOver = traverseOver;
+                                }
+
+                                if (ball?.score?.is_wicket == "1")
+                                {
+                                    totalWickets++;
+                                }
+
+                                overRuns += Convert.ToInt32(ball?.score?.runs);
+                                totalRuns += Convert.ToInt32(ball?.score?.runs);
+                                if (ball?.score?.leg_bye == true || ball?.score?.bye == true)
+                                {
+                                    totalRuns += Convert.ToInt32(ball?.score?.name?.Split(" ")[0]);
+                                }
+
+                                if (ball != null)
+                                {
+                                    ball.total_wickets = totalWickets;
+                                    ball.total_score = totalRuns;
+                                    ball.over_score = overRuns;
+                                }
+                            }
+                        }
+                    }
+
+                    List<FixturesBalls>? arrLastWicketFB = fixturesBalls?.balls?.FindAll(e => e.score?.is_wicket == "1");
+                    if (arrLastWicketFB != null && arrLastWicketFB.Any())
+                    {
+                        FixturesBalls objLastWicketFB = arrLastWicketFB.Last();
+                        LastWicket lstWicket = new LastWicket();
+                        lstWicket.playerName = objLastWicketFB?.batsman_out;
+                        lstWicket.wicketNumber = objLastWicketFB?.total_wickets;
+                        lstWicket.overNumber = objLastWicketFB?.ball;
+                        lstWicket.score = objLastWicketFB?.total_score;
+
+                        if (fixturesBalls != null)
+                        {
+                            fixturesBalls.last_wicket = lstWicket;
+                        }
+                    }
 
                     List<Fixtures_Balls> fixturesBallsLst = new List<Fixtures_Balls>();
                     if (fixturesBalls != null)
