@@ -281,6 +281,7 @@ namespace CricketAPI.Controllers
                                 if (ball?.score?.leg_bye == true || ball?.score?.bye == true)
                                 {
                                     totalRuns += Convert.ToInt32(ball?.score?.name?.Split(" ")[0]);
+                                    overRuns += Convert.ToInt32(ball?.score?.name?.Split(" ")[0]);
                                 }
 
                                 if (ball != null)
