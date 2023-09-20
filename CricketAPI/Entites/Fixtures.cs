@@ -174,6 +174,7 @@ namespace CricketAPI
     public class Lineup
     {
         public long player_id { get; set; }
+        public int? sort { get; set; }
         public string? player_dob { get; set; }
         public string? player_fullname { get; set; }
         public int? player_position { get; set; }

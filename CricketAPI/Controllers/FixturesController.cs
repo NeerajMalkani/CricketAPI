@@ -174,8 +174,15 @@ namespace CricketAPI.Controllers
             {
                 FixturesTeamLineup? fixturesTeamLineup = new FixturesRepository().GetLineup(_db, fixture_id);
                 List<FixturesTeamLineup> fixturesTeamLineups = new List<FixturesTeamLineup>();
-                if (fixturesTeamLineup != null)
+                if (fixturesTeamLineup != null && fixturesTeamLineup.teamlineup != null)
                 {
+                    foreach (Teamlineup teamlineup in fixturesTeamLineup.teamlineup)
+                    {
+                        if(teamlineup != null && teamlineup.team != null)
+                        {
+                            teamlineup.team = teamlineup.team.OrderBy(team => team?.sort).ToList();
+                        }
+                    }
                     fixturesTeamLineups.Add(fixturesTeamLineup);
                 }
                 Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, fixturesTeamLineups);
