@@ -149,6 +149,23 @@ namespace CricketAPI.Controllers
             try
             {
                 Scoreboard? scorecard = new FixturesRepository().GetScorecard(_db, fixture_id);
+                FixturesTeamLineup? fixturesTeamLineup = new FixturesRepository().GetLineup(_db, fixture_id);
+                if (fixturesTeamLineup != null && fixturesTeamLineup.teamlineup != null && scorecard != null && scorecard.scorecard != null)
+                {
+                    Teamlineup? teamlineup1 = fixturesTeamLineup.teamlineup.Find(team => team.team_id == scorecard.scorecard[0].team_id);
+                    if (teamlineup1 != null)
+                    {
+                        scorecard.scorecard[0].yetToBat = teamlineup1.team;
+                    }
+                    if (scorecard.scorecard.Count > 1)
+                    {
+                        Teamlineup? teamlineup2 = fixturesTeamLineup.teamlineup.Find(team => team.team_id == scorecard.scorecard[1].team_id);
+                        if (teamlineup2 != null)
+                        {
+                            scorecard.scorecard[1].yetToBat = teamlineup2.team;
+                        }
+                    }
+                }
                 List<Scoreboard> scores = new List<Scoreboard>();
                 if (scorecard != null)
                 {
@@ -178,7 +195,7 @@ namespace CricketAPI.Controllers
                 {
                     foreach (Teamlineup teamlineup in fixturesTeamLineup.teamlineup)
                     {
-                        if(teamlineup != null && teamlineup.team != null)
+                        if (teamlineup != null && teamlineup.team != null)
                         {
                             teamlineup.team = teamlineup.team.OrderBy(team => team?.sort).ToList();
                         }

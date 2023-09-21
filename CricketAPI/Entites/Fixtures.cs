@@ -145,6 +145,7 @@ namespace CricketAPI
         public string? scoreboard { get; set; }
         public MatchScore? match_score { get; set; }
         public List<Batting>? batting { get; set; }
+        public List<Lineup>? yetToBat { get; set; }
         public List<Bowling>? bowling { get; set; }
     }
     public class Scoreboard
