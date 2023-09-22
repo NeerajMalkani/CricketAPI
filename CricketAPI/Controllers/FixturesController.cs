@@ -152,17 +152,30 @@ namespace CricketAPI.Controllers
                 FixturesTeamLineup? fixturesTeamLineup = new FixturesRepository().GetLineup(_db, fixture_id);
                 if (fixturesTeamLineup != null && fixturesTeamLineup.teamlineup != null && scorecard != null && scorecard.scorecard != null)
                 {
-                    Teamlineup? teamlineup1 = fixturesTeamLineup.teamlineup.Find(team => team.team_id == scorecard.scorecard[0].team_id);
-                    if (teamlineup1 != null)
+                    foreach (Scorecard sc in scorecard.scorecard)
                     {
-                        scorecard.scorecard[0].yetToBat = teamlineup1.team;
-                    }
-                    if (scorecard.scorecard.Count > 1)
-                    {
-                        Teamlineup? teamlineup2 = fixturesTeamLineup.teamlineup.Find(team => team.team_id == scorecard.scorecard[1].team_id);
-                        if (teamlineup2 != null)
+                        Teamlineup? teamlineup = fixturesTeamLineup.teamlineup.Find(team => team.team_id == sc.team_id);
+                        List<Lineup>? sortedTeam = teamlineup?.team?.OrderBy(e => e.sort).ToList();
+                        List<Lineup> plToRem = new List<Lineup>();
+                        if (sortedTeam != null)
                         {
-                            scorecard.scorecard[1].yetToBat = teamlineup2.team;
+                            foreach (Lineup sst in sortedTeam)
+                            {
+                                if (sst != null)
+                                {
+                                    Batting? checkPlayer = scorecard?.scorecard[0]?.batting?.Find(e => e.batsman == sst.player_fullname);
+                                    if (checkPlayer != null)
+                                    {
+                                        plToRem.Add(sst);
+                                    }
+                                }
+                            }
+                            Console.WriteLine(plToRem);
+                            foreach (Lineup lp in plToRem)
+                            {
+                                sortedTeam.Remove(lp);
+                            }
+                            sc.yetToBat = sortedTeam;
                         }
                     }
                 }
@@ -247,6 +260,14 @@ namespace CricketAPI.Controllers
                             {
                                 fixturesBalls.rpc_target = Math.Round((Convert.ToDecimal(remaining_score) / Convert.ToDecimal(remaining_overs)) * 6, 2).ToString();
                             }
+                        }
+                    }
+                    else if (string.IsNullOrEmpty(fixturesBalls?.note))
+                    {
+                        string? tossWinningTeam = fixturesBalls?.toss_won_team_id == fixturesBalls?.localteam?.id ? fixturesBalls?.localteam?.name : fixturesBalls?.visitorteam?.name;
+                        if (fixturesBalls != null)
+                        {
+                            fixturesBalls.note = tossWinningTeam + " won the toss and elected " + fixturesBalls.elected;
                         }
                     }
 
