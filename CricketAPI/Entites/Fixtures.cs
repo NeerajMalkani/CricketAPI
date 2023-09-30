@@ -9,6 +9,7 @@ namespace CricketAPI
         [Key]
         public long? id { get; set; }
         public string? code { get; set; }
+        public string? color { get; set; }
         public string? name { get; set; }
         public string? image_path { get; set; }
     }
@@ -17,6 +18,7 @@ namespace CricketAPI
         [Key]
         public long? id { get; set; }
         public string? code { get; set; }
+        public string? color { get; set; }
         public string? name { get; set; }
         public string? image_path { get; set; }
     }
@@ -191,6 +193,7 @@ namespace CricketAPI
         public List<Lineup>? team { get; set; }
         public int team_id { get; set; }
         public string? team_code { get; set; }
+        public string? team_color { get; set; }
         public string? team_name { get; set; }
         public string? team_image_path { get; set; }
     }

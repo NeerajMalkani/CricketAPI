@@ -35,10 +35,13 @@ namespace CricketAPI.Controllers
                         {
                             int? score = fixture.match_score?[fixture.match_score.Count - 1].score;
                             List<string>? overs = fixture.match_score?[fixture.match_score.Count - 1]?.overs?.Split(".").ToList();
-                            int? over = (Convert.ToInt16(overs?[0]) * 6) + (overs != null && overs?.Count > 1 ? Convert.ToInt16(overs?[1]) : 0);
-                            if (fixture.match_info != null)
+                            if (overs != null)
                             {
-                                fixture.match_info.rpc_overs = Math.Round((Convert.ToDecimal(score) / Convert.ToDecimal(over)) * 6, 2).ToString();
+                                int? over = (Convert.ToInt16(overs?[0]) * 6) + (overs != null && overs?.Count > 1 ? Convert.ToInt16(overs?[1]) : 0);
+                                if (fixture.match_info != null)
+                                {
+                                    fixture.match_info.rpc_overs = Math.Round((Convert.ToDecimal(score) / Convert.ToDecimal(over)) * 6, 2).ToString();
+                                }
                             }
                         }
                         if (fixture.match_info?.note?.Contains("Target") == true && (fixture.match_score?.Count > 1 && Convert.ToDouble(fixture.match_score?[fixture.match_score.Count - 1].overs) > 0))
@@ -95,10 +98,13 @@ namespace CricketAPI.Controllers
                         {
                             int? score = fixture.match_score?[fixture.match_score.Count - 1].score;
                             List<string>? overs = fixture.match_score?[fixture.match_score.Count - 1]?.overs?.Split(".").ToList();
-                            int? over = (Convert.ToInt16(overs?[0]) * 6) + (overs != null && overs?.Count > 1 ? Convert.ToInt16(overs?[1]) : 0);
-                            if (fixture.match_info != null)
+                            if (overs != null)
                             {
-                                fixture.match_info.rpc_overs = Math.Round((Convert.ToDecimal(score) / Convert.ToDecimal(over)) * 6, 2).ToString();
+                                int? over = (Convert.ToInt16(overs?[0]) * 6) + (overs != null && overs?.Count > 1 ? Convert.ToInt16(overs?[1]) : 0);
+                                if (fixture.match_info != null)
+                                {
+                                    fixture.match_info.rpc_overs = Math.Round((Convert.ToDecimal(score) / Convert.ToDecimal(over)) * 6, 2).ToString();
+                                }
                             }
                             if (fixture.match_info?.note?.Contains("Target") == true && (fixture.match_score?.Count > 1 && Convert.ToDouble(fixture.match_score?[fixture.match_score.Count - 1].overs) > 0))
                             {
@@ -150,11 +156,12 @@ namespace CricketAPI.Controllers
             {
                 Scoreboard? scorecard = new FixturesRepository().GetScorecard(_db, fixture_id);
                 FixturesTeamLineup? fixturesTeamLineup = new FixturesRepository().GetLineup(_db, fixture_id);
-                if (fixturesTeamLineup != null && fixturesTeamLineup.teamlineup != null && scorecard != null && scorecard.scorecard != null)
+                if (fixturesTeamLineup != null && fixturesTeamLineup.teamlineup != null && scorecard != null && scorecard.scorecard != null && scorecard.scorecard.Count > 0)
                 {
                     Teamlineup? teamlineup1 = fixturesTeamLineup.teamlineup.Find(team => team.team_id == scorecard.scorecard[0].team_id);
                     if (teamlineup1 != null)
                     {
+                        teamlineup1.team = teamlineup1.team?.OrderBy(e => e.sort).ToList();
                         scorecard.scorecard[0].yetToBat = teamlineup1.team;
                     }
                     if (scorecard.scorecard.Count > 1)
@@ -162,6 +169,7 @@ namespace CricketAPI.Controllers
                         Teamlineup? teamlineup2 = fixturesTeamLineup.teamlineup.Find(team => team.team_id == scorecard.scorecard[1].team_id);
                         if (teamlineup2 != null)
                         {
+                            teamlineup2.team = teamlineup2.team?.OrderBy(e => e.sort).ToList();
                             scorecard.scorecard[1].yetToBat = teamlineup2.team;
                         }
                     }
@@ -226,10 +234,13 @@ namespace CricketAPI.Controllers
 
                     int? score = fixturesBalls.match_score?[fixturesBalls.match_score.Count - 1].score;
                     List<string>? overs = fixturesBalls.match_score?[fixturesBalls.match_score.Count - 1]?.overs?.Split(".").ToList();
-                    int? over = (Convert.ToInt16(overs?[0]) * 6) + (overs != null && overs?.Count > 1 ? Convert.ToInt16(overs?[1]) : 0);
-                    if (fixturesBalls != null)
+                    if (overs != null)
                     {
-                        fixturesBalls.rpc_overs = Math.Round((Convert.ToDecimal(score) / Convert.ToDecimal(over)) * 6, 2).ToString();
+                        int? over = (Convert.ToInt16(overs?[0]) * 6) + (overs != null && overs?.Count > 1 ? Convert.ToInt16(overs?[1]) : 0);
+                        if (fixturesBalls != null)
+                        {
+                            fixturesBalls.rpc_overs = Math.Round((Convert.ToDecimal(score) / Convert.ToDecimal(over)) * 6, 2).ToString();
+                        }
                     }
 
                     if (fixturesBalls?.note?.Contains("Target") == true && (fixturesBalls?.match_score?.Count > 1 && Convert.ToDouble(fixturesBalls?.match_score?[fixturesBalls.match_score.Count - 1].overs) > 0))
@@ -246,6 +257,11 @@ namespace CricketAPI.Controllers
                             if (fixturesBalls != null && remaining_score > 0 && remaining_overs > 0)
                             {
                                 fixturesBalls.rpc_target = Math.Round((Convert.ToDecimal(remaining_score) / Convert.ToDecimal(remaining_overs)) * 6, 2).ToString();
+                            }
+                            string? battingTeam = fixturesBalls?.match_score?[fixturesBalls.match_score.Count - 1].team_id == fixturesBalls?.localteam?.id ? fixturesBalls?.localteam?.name : fixturesBalls?.visitorteam?.name;
+                            if (fixturesBalls != null)
+                            {
+                                fixturesBalls.note = battingTeam + " requires " + remaining_score + (remaining_overs == 1 ? " run" : " runs") + " in " + remaining_overs + (remaining_overs == 1 ? " ball" : " balls");
                             }
                         }
                     }
