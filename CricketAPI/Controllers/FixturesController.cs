@@ -376,10 +376,9 @@ namespace CricketAPI.Controllers
             Response response = new Response();
             try
             {
-                Fixtures_Balls? fixturesBalls = new FixturesRepository().GetBallsWithOffset(_db, fixture_id, innings_id, start_index, count);
+                Fixtures_Balls? fixturesBalls = new FixturesRepository().GetBallsWithOffset(_db, fixture_id, innings_id);
                 if (fixturesBalls != null)
                 {
-
                     int? score = fixturesBalls.match_score?[fixturesBalls.match_score.Count - 1].score;
                     List<string>? overs = fixturesBalls.match_score?[fixturesBalls.match_score.Count - 1]?.overs?.Split(".").ToList();
                     if (overs != null)
@@ -503,6 +502,10 @@ namespace CricketAPI.Controllers
                     {
                         fixturesBallsLst.Add(fixturesBalls);
                     }
+
+                    fixturesBallsLst[0].balls?.Reverse();
+                    fixturesBallsLst[0].balls = fixturesBallsLst[0].balls?.Skip(start_index).Take(count).ToList();
+
                     Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, fixturesBallsLst);
                 }
                 else
