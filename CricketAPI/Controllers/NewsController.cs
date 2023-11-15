@@ -28,6 +28,7 @@ namespace CricketAPI.Controllers
                 List<News> news = new NewsRepository().GetNews(_db);
                 if (news.Any())
                 {
+                    news = news.Take(10).ToList();
                     Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, news);
                 }
                 else
