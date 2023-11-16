@@ -64,8 +64,15 @@ namespace CricketAPI.Controllers
                         }
                         else if (string.IsNullOrEmpty(fixture.match_info?.note) && fixture.match_info != null)
                         {
-                            string? tossWinningTeam = fixture.match_info.toss_won_team_id == fixture.match_info.localteam?.id ? fixture.match_info.localteam?.name : fixture.match_info.visitorteam?.name;
-                            fixture.match_info.note = tossWinningTeam + " won the toss and elected " + fixture.match_info.elected;
+                            if (fixture.match_info.toss_won_team_id != null && fixture.match_info.toss_won_team_id > 0)
+                            {
+                                string? tossWinningTeam = fixture.match_info.toss_won_team_id == fixture.match_info.localteam?.id ? fixture.match_info.localteam?.name : fixture.match_info.visitorteam?.name;
+                                fixture.match_info.note = tossWinningTeam + " won the toss and elected " + fixture.match_info.elected;
+                            }
+                            else
+                            {
+                                fixture.match_info.note = "The match has not started yet";
+                            }
                         }
                     }
                     Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, fixtures);
@@ -126,8 +133,15 @@ namespace CricketAPI.Controllers
                             }
                             else if (string.IsNullOrEmpty(fixture.match_info?.note) && fixture.match_info != null)
                             {
-                                string? tossWinningTeam = fixture.match_info.toss_won_team_id == fixture.match_info.localteam?.id ? fixture.match_info.localteam?.name : fixture.match_info.visitorteam?.name;
-                                fixture.match_info.note = tossWinningTeam + " won the toss and elected " + fixture.match_info.elected;
+                                if (fixture.match_info.toss_won_team_id != null && fixture.match_info.toss_won_team_id > 0)
+                                {
+                                    string? tossWinningTeam = fixture.match_info.toss_won_team_id == fixture.match_info.localteam?.id ? fixture.match_info.localteam?.name : fixture.match_info.visitorteam?.name;
+                                    fixture.match_info.note = tossWinningTeam + " won the toss and elected " + fixture.match_info.elected;
+                                }
+                                else
+                                {
+                                    fixture.match_info.note = "The match has not started yet";
+                                }
                             }
                         }
                     }
