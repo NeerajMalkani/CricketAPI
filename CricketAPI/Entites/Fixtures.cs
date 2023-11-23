@@ -124,6 +124,7 @@ namespace CricketAPI
         public string? runout { get; set; }
         public string? how_out { get; set; }
         public string? catch_stump { get; set; }
+        public bool? is_strike { get; set; }
     }
     [Keyless]
     public class Bowling
