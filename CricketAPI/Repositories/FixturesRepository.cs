@@ -129,6 +129,25 @@ namespace CricketAPI.Repositories
             }
             return fixturesBalls;
         }
+
+        public Fixtures_Balls? GetBallsWithOffset(DataContext context, long fixture_id, string innings_id)
+        {
+            Fixtures_Balls fixturesBalls = new Fixtures_Balls();
+            try
+            {
+                List<BallJson> ballJson = context.BallJson.FromSqlRaw("CALL `cric_Get_FixtureBall_v4`(" + fixture_id + ", '" + innings_id + "')").ToList();
+                if (ballJson.Count > 0)
+                {
+                    fixturesBalls = JsonConvert.DeserializeObject<Fixtures_Balls>(ballJson[0].Fixtures_Balls) ?? throw new ArgumentException();
+                }
+
+            }
+            catch (Exception)
+            {
+                fixturesBalls = new Fixtures_Balls();
+            }
+            return fixturesBalls;
+        }
         #endregion
     }
 }
