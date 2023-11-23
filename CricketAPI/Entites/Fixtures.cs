@@ -61,6 +61,7 @@ namespace CricketAPI
         [Key]
         public long id { get; set; }
         public long series_id { get; set; }
+        public long stage_id { get; set; }
         public long league_id { get; set; }
         public string? league_name { get; set; }
         public string? season_name { get; set; }
