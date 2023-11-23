@@ -47,12 +47,12 @@ namespace CricketAPI.Controllers
         #region Get Series Fixtures
         [HttpGet]
         [Route("fixtures")]
-        public Response GetSeriesFixtures([FromQuery] long series_id)
+        public Response GetSeriesFixtures(long series_id, long stage_id)
         {
             Response response = new Response();
             try
             {
-                List<Fixtures> fixtures = new SeriesRepository().GetSeriesFixtures(_db, series_id);
+                List<Fixtures> fixtures = new SeriesRepository().GetSeriesFixtures(_db, series_id, stage_id);
                 if (fixtures.Any())
                 {
                     Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, fixtures);
@@ -73,12 +73,12 @@ namespace CricketAPI.Controllers
         #region Series Standings
         [HttpGet]
         [Route("standings")]
-        public Response GetStandings(long series_id)
+        public Response GetStandings(long series_id, long stage_id)
         {
             Response response = new Response();
             try
             {
-                List<Standings> standings = new SeriesRepository().GetStandings(_db, series_id);
+                List<Standings> standings = new SeriesRepository().GetStandings(_db, series_id, stage_id);
                 if (standings.Any())
                 {
                     standings[0].standings = standings[0]?.standings?.OrderBy(sta => sta.position).ToList();
