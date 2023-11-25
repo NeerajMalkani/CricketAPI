@@ -9,8 +9,8 @@ namespace CricketAPI
         [Key]
         public long? id { get; set; }
         public string? code { get; set; }
-        public string? color { get; set; }
         public string? name { get; set; }
+        public string? color { get; set; }
         public string? image_path { get; set; }
     }
     public class Visitorteam
@@ -18,8 +18,8 @@ namespace CricketAPI
         [Key]
         public long? id { get; set; }
         public string? code { get; set; }
-        public string? color { get; set; }
         public string? name { get; set; }
+        public string? color { get; set; }
         public string? image_path { get; set; }
     }
     public class ManOfTheMatch
@@ -61,6 +61,7 @@ namespace CricketAPI
         [Key]
         public long id { get; set; }
         public long series_id { get; set; }
+        public long stage_id { get; set; }
         public long league_id { get; set; }
         public string? league_name { get; set; }
         public string? season_name { get; set; }
@@ -123,6 +124,7 @@ namespace CricketAPI
         public string? runout { get; set; }
         public string? how_out { get; set; }
         public string? catch_stump { get; set; }
+        public bool? is_strike { get; set; }
     }
     [Keyless]
     public class Bowling
@@ -193,8 +195,8 @@ namespace CricketAPI
         public List<Lineup>? team { get; set; }
         public int team_id { get; set; }
         public string? team_code { get; set; }
-        public string? team_color { get; set; }
         public string? team_name { get; set; }
+        public string? team_color { get; set; }
         public string? team_image_path { get; set; }
     }
     public class FixturesTeamLineup
@@ -313,6 +315,8 @@ namespace CricketAPI
         public string? rpc_overs { get; set; }
         public string? rpc_target { get; set; }
         public int? total_overs_played { get; set; }
+        public long? toss_won_team_id { get; set; }
+        public string? elected { get; set; }
         public DateTime? starting_at { get; set; }
         public Localteam? localteam { get; set; }
         public Visitorteam? visitorteam { get; set; }

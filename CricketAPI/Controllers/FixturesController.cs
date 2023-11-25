@@ -519,6 +519,16 @@ namespace CricketAPI.Controllers
 
                     fixturesBallsLst[0].balls?.Reverse();
                     fixturesBallsLst[0].balls = fixturesBallsLst[0].balls?.Skip(start_index).Take(count).ToList();
+                    
+                    if (fixturesBallsLst[0] != null && fixturesBallsLst[0].miniscore != null && fixturesBallsLst[0]?.miniscore?.batting != null)
+                    {
+                        FixturesBalls? objFirstBall = fixturesBalls?.balls?.First();
+                        foreach (Batting batt in fixturesBallsLst[0].miniscore.batting)
+                        {
+                            batt.is_strike = (batt.batsman == objFirstBall?.batsman_strike?.name);
+                        }
+                    }
+
 
                     Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, fixturesBallsLst);
                 }

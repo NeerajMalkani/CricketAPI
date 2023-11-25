@@ -26,12 +26,12 @@ namespace CricketAPI.Repositories
             return seriesLst;
         }
 
-        public List<Fixtures> GetSeriesFixtures(DataContext context, long series_id)
+        public List<Fixtures> GetSeriesFixtures(DataContext context, long series_id, long stage_id)
         {
             List<Fixtures> fixtures = new List<Fixtures>();
             try
             {
-                List<FixturesJson> fixturesJson = context.FixturesJson.FromSqlRaw("CALL `cric_Get_SeriesFixtures`(" + series_id + ")").ToList();
+                List<FixturesJson> fixturesJson = context.FixturesJson.FromSqlRaw("CALL `cric_Get_SeriesFixtures_v1`(" + series_id + ", " + stage_id + ")").ToList();
                 if (!fixturesJson[0].Fixtures.Equals("[]"))
                 {
                     fixtures = JsonConvert.DeserializeObject<List<Fixtures>>(fixturesJson[0].Fixtures) ?? throw new ArgumentException();
@@ -44,12 +44,12 @@ namespace CricketAPI.Repositories
             return fixtures;
         }
 
-        public List<Standings> GetStandings(DataContext context, long series_id)
+        public List<Standings> GetStandings(DataContext context, long series_id, long stage_id)
         {
             List<Standings> standingsLst = new List<Standings>();
             try
             {
-                List<StandingsJson> standingsJson = context.StandingsJson.FromSqlRaw("CALL `cric_Get_SeriesStandings`(" + series_id + ")").ToList();
+                List<StandingsJson> standingsJson = context.StandingsJson.FromSqlRaw("CALL `cric_Get_SeriesStandings_v1`(" + series_id + ", " + stage_id + ")").ToList();
                 if (standingsJson.Count > 0)
                 {
                     Standings standingsObj = JsonConvert.DeserializeObject<Standings>(standingsJson[0].Standings) ?? throw new ArgumentException();
