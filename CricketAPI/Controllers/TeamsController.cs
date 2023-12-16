@@ -89,5 +89,29 @@ namespace CricketAPI.Controllers
             return response;
         }
         #endregion
+
+        #region Get Series Team Lineup
+        [HttpGet]
+        [Route("serieslineup")]
+        public Response GetLineup([FromQuery] long fixture_id)
+        {
+            Response response = new Response();
+            try
+            {
+                FixturesTeamLineup? fixturesTeamLineup = new TeamsRepository().GetLineup(_db, fixture_id);
+                List<FixturesTeamLineup> fixturesTeamLineups = new List<FixturesTeamLineup>();
+                if (fixturesTeamLineup != null && fixturesTeamLineup.teamlineup != null)
+                {
+                    fixturesTeamLineups.Add(fixturesTeamLineup);
+                }
+                Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, fixturesTeamLineups);
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+        #endregion
     }
 }

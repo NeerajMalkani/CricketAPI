@@ -60,9 +60,9 @@ namespace CricketAPI
     {
         [Key]
         public long id { get; set; }
-        public long series_id { get; set; }
-        public long stage_id { get; set; }
-        public long league_id { get; set; }
+        public long? series_id { get; set; }
+        public long? stage_id { get; set; }
+        public long? league_id { get; set; }
         public string? league_name { get; set; }
         public string? season_name { get; set; }
         public string? stage_name { get; set; }
@@ -182,6 +182,7 @@ namespace CricketAPI
         public int? sort { get; set; }
         public string? player_dob { get; set; }
         public string? player_fullname { get; set; }
+        public decimal player_points { get; set; }
         public int? player_position { get; set; }
         public string? player_image_path { get; set; }
         public string? player_is_captain { get; set; }

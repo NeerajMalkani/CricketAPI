@@ -1,4 +1,6 @@
 ﻿using CricketAPI.Helpers;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace CricketAPI.Repositories
 {
@@ -45,5 +47,26 @@ namespace CricketAPI.Repositories
             }
             return teams;
         }
+
+        #region Series Lineup
+        public FixturesTeamLineup? GetLineup(DataContext context, long fixture_id)
+        {
+            FixturesTeamLineup fixturesTeamLineup = new FixturesTeamLineup();
+            try
+            {
+                List<LineupJson> lineupJson = context.LineupJson.FromSqlRaw("CALL `cric_Get_SeriesTeamsLineup`(" + fixture_id + ")").ToList();
+                if (lineupJson.Count > 0)
+                {
+                    fixturesTeamLineup = JsonConvert.DeserializeObject<FixturesTeamLineup>(lineupJson[0].Fixtures_TeamLineup) ?? throw new ArgumentException();
+                }
+
+            }
+            catch (Exception)
+            {
+                fixturesTeamLineup = new FixturesTeamLineup();
+            }
+            return fixturesTeamLineup;
+        }
+        #endregion
     }
 }
