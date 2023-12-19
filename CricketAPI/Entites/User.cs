@@ -11,8 +11,8 @@ namespace CricketAPI.Entites
         public long? fixture_id { get; set; }
         public long? team_id { get; set; }
         public long? player_id { get; set; }
-        public bool? is_captain { get; set; }
-        public bool? is_vice_captain { get; set; }
+        public bool? is_captain { get; set; } = false;
+        public bool? is_vice_captain { get; set; } = false;
 
     }
 
