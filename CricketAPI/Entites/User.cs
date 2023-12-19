@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace CricketAPI.Entites
 {
@@ -10,6 +11,8 @@ namespace CricketAPI.Entites
         public long? fixture_id { get; set; }
         public long? team_id { get; set; }
         public long? player_id { get; set; }
+        public bool? is_captain { get; set; }
+        public bool? is_vice_captain { get; set; }
 
     }
 
@@ -19,9 +22,16 @@ namespace CricketAPI.Entites
         public long fixture_id { get; set; }
     }
 
-    public class UserTeamResponse
+    public class UserTeamJson
     {
-        public long? id { get; set; }
+        [Key]
+        public string UserTeamLineup { get; set; } = "";
+    }
+
+    public class UserTeamLineup
+    {
+        [Key]
+        public long id { get; set; }
         public long? league_id { get; set; }
         public long? series_id { get; set; }
         public string? league_name { get; set; }
@@ -32,19 +42,21 @@ namespace CricketAPI.Entites
         public string? type { get; set; }
         public string? status { get; set; }
         public List<Teamlineup>? teamlineup { get; set; }
-        public DateTime? starting_at { get; set; }
+        public string? starting_at { get; set; }
     }
 
+    [Keyless]
     public class Teamlineup
     {
-        [Key]
-        public long? player_id { get; set; }
         public long? team_id { get; set; }
         public string? team_name { get; set; }
+        public long? player_id { get; set; }
         public decimal? player_points { get; set; }
         public string? player_fullname { get; set; }
         public string? player_image_path { get; set; }
         public string? player_position_name { get; set; }
+        public bool? is_captain { get; set; }
+        public bool? is_vice_captain { get; set; }
     }
 
 

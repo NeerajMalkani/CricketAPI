@@ -50,14 +50,16 @@ namespace CricketAPI.Controllers
             Response response = new Response();
             try
             {
-                List<UserTeamResponse>? userTeamResponse = new UserRepository().GetUserTeam(_db, userTeamRequest);
-                if (userTeamResponse.Any())
+                UserTeamLineup? userTeamLineup = new UserRepository().GetUserTeam(_db, userTeamRequest);
+                List<UserTeamLineup> userTeamLineups = new List<UserTeamLineup>();
+                if (userTeamLineup != null && userTeamLineup.teamlineup != null)
                 {
-                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, userTeamResponse);
+                    userTeamLineups.Add(userTeamLineup);
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, userTeamLineups);
                 }
                 else
                 {
-                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, userTeamResponse);
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, userTeamLineups);
                 }
             }
             catch (Exception ex)
@@ -67,6 +69,29 @@ namespace CricketAPI.Controllers
             return response;
         }
 
+        [HttpPut]
+        [Route("teams")]
+        public async Task<Response> UpdateUserTeamAsync([FromBody] UserTeam userTeam)
+        {
+            Response response = new Response();
+            try
+            {
+                int rowsAffected = await new UserRepository().UpdateUserTeam(_db, userTeam);
+                if (rowsAffected > 0)
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
         #endregion    
     }
 }

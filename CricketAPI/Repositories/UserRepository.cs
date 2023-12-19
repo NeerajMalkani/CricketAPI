@@ -15,7 +15,9 @@ namespace CricketAPI.Repositories
                 if (userTeams != null && userTeams.Count() > 0)
                 {
                     foreach (var team in userTeams)
+                    {
                         context.UserTeam.Add(team);
+                    }
                     await context.SaveChangesAsync();
                     rowsAffected++;
                 }
@@ -28,18 +30,49 @@ namespace CricketAPI.Repositories
             return rowsAffected;
         }
 
-        public List<UserTeamResponse> GetUserTeam(DataContext context, UserTeamRequest userTeamRequest)
+        public UserTeamLineup? GetUserTeam(DataContext context, UserTeamRequest userTeamRequest)
         {
-            List<UserTeamResponse>? userTeamResponse = new List<UserTeamResponse>();
+            UserTeamLineup? userTeamLineup = new UserTeamLineup();
             try
             {
-                userTeamResponse = context.UserTeamResponse.FromSqlRaw("CALL `cric_Get_UserTeam`(" + userTeamRequest.fixture_id + ", '" + userTeamRequest.user_id + "')").ToList();
+                List<UserTeamJson> userTeamJsons = context.UserTeamJson.FromSqlRaw("CALL `cric_Get_UserTeam`(" + userTeamRequest.fixture_id + ", '" + userTeamRequest.user_id + "')").ToList();
+                if (userTeamJsons.Count > 0)
+                {
+                    userTeamLineup = JsonConvert.DeserializeObject<UserTeamLineup>(userTeamJsons[0].UserTeamLineup) ?? throw new ArgumentException();
+                }
+
             }
             catch (Exception)
             {
-                userTeamResponse = new List<UserTeamResponse>();
+                userTeamLineup = new UserTeamLineup();
             }
-            return userTeamResponse;
+            return userTeamLineup;
+        }
+
+        public async Task<int> UpdateUserTeam(DataContext context, UserTeam userTeam)
+        {
+            int rowsAffected = 0;
+            try
+            {
+                if (userTeam != null)
+                {
+                    UserTeam? team = context.UserTeam.FirstOrDefault(item => item.user_id == userTeam.user_id && item.fixture_id == userTeam.fixture_id && item.player_id == userTeam.player_id);
+                    if (team != null)
+                    {
+                        team.is_captain = userTeam.is_captain;
+                        team.is_vice_captain = userTeam.is_vice_captain;
+                        context.UserTeam.Update(team);
+                        await context.SaveChangesAsync();
+                        rowsAffected++;
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                rowsAffected = 0;
+            }
+            return rowsAffected;
         }
     }
 }
