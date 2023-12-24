@@ -7,35 +7,78 @@ namespace CricketAPI.Repositories
 {
     public class UserRepository
     {
-        public async Task<int> InsertUserTeam(DataContext context, List<UserTeam> userTeams)
+        public async Task<UserSaveTeamResponse> InsertUserTeam(DataContext context, UserSaveTeamRequest userSaveTeamRequest)
         {
-            int rowsAffected = 0;
+            UserSaveTeamResponse userSaveTeamResponse = new UserSaveTeamResponse();
             try
             {
-                if (userTeams != null && userTeams.Count() > 0)
+                if (userSaveTeamRequest != null && userSaveTeamRequest.userTeam != null && userSaveTeamRequest.userTeamPlayers != null && userSaveTeamRequest.userTeamPlayers.Count > 0)
                 {
-                    foreach (var team in userTeams)
+                    context.UserTeam.Add(userSaveTeamRequest.userTeam);
+                    await context.SaveChangesAsync();
+
+                    foreach (UserTeamPlayers team in userSaveTeamRequest.userTeamPlayers)
                     {
-                        context.UserTeam.Add(team);
+                        team.user_team_id = userSaveTeamRequest.userTeam.id;
+                        context.UserTeamPlayers.Add(team);
                     }
                     await context.SaveChangesAsync();
-                    rowsAffected++;
+                    userSaveTeamResponse.user_team_id = userSaveTeamRequest.userTeam.id;
+                    userSaveTeamResponse.rowsAffected = 1;
                 }
 
             }
             catch (Exception)
             {
-                rowsAffected = 0;
+                userSaveTeamResponse.rowsAffected = 0;
             }
-            return rowsAffected;
+            return userSaveTeamResponse;
         }
 
-        public UserTeamLineup? GetUserTeam(DataContext context, UserTeamRequest userTeamRequest)
+        public UserTeamList? GetUserTeam(DataContext context, UserTeamRequest userTeamRequest)
+        {
+            UserTeamList? userTeamList = new UserTeamList();
+            try
+            {
+                List<UserTeamJson> userTeamJsons = context.UserTeamJson.FromSqlRaw("CALL `cric_Get_UserTeam`(" + userTeamRequest.fixture_id + ", '" + userTeamRequest.user_id + "')").ToList();
+                if (userTeamJsons.Count > 0)
+                {
+                    userTeamList = JsonConvert.DeserializeObject<UserTeamList>(userTeamJsons[0].UserTeamList) ?? throw new ArgumentException();
+                }
+
+            }
+            catch (Exception)
+            {
+                userTeamList = new UserTeamList();
+            }
+            return userTeamList;
+        }
+
+        public UserTeamWithPlayers? GetUserTeamWithPlayers(DataContext context, UserTeamRequest userTeamRequest)
+        {
+            UserTeamWithPlayers? userTeamWithPlayers = new UserTeamWithPlayers();
+            try
+            {
+                List<UserTeamWithPlayersJson> userTeamJsons = context.UserTeamWithPlayersJson.FromSqlRaw("CALL `cric_Get_UserTeamWithPlayers`(" + userTeamRequest.fixture_id + ", '" + userTeamRequest.user_id + "')").ToList();
+                if (userTeamJsons.Count > 0)
+                {
+                    userTeamWithPlayers = JsonConvert.DeserializeObject<UserTeamWithPlayers>(userTeamJsons[0].UserTeamWithPlayers) ?? throw new ArgumentException();
+                }
+
+            }
+            catch (Exception)
+            {
+                userTeamWithPlayers = new UserTeamWithPlayers();
+            }
+            return userTeamWithPlayers;
+        }
+
+        public UserTeamLineup? GetUserTeamPlayers(DataContext context, UserTeamRequest userTeamRequest)
         {
             UserTeamLineup? userTeamLineup = new UserTeamLineup();
             try
             {
-                List<UserTeamJson> userTeamJsons = context.UserTeamJson.FromSqlRaw("CALL `cric_Get_UserTeam`(" + userTeamRequest.fixture_id + ", '" + userTeamRequest.user_id + "')").ToList();
+                List<UserTeamLineupJson> userTeamJsons = context.UserTeamLineupJson.FromSqlRaw("CALL `cric_Get_UserTeamPlayers`(" + userTeamRequest.fixture_id + ", " + userTeamRequest.user_team_id + ", '" + userTeamRequest.user_id + "')").ToList();
                 if (userTeamJsons.Count > 0)
                 {
                     userTeamLineup = JsonConvert.DeserializeObject<UserTeamLineup>(userTeamJsons[0].UserTeamLineup) ?? throw new ArgumentException();
@@ -49,22 +92,25 @@ namespace CricketAPI.Repositories
             return userTeamLineup;
         }
 
-        public async Task<int> UpdateUserTeam(DataContext context, UserTeam userTeam)
+        public async Task<int> UpdateUserTeam(DataContext context, List<UserTeamPlayers>? userTeamPlayers)
         {
             int rowsAffected = 0;
             try
             {
-                if (userTeam != null)
+                if (userTeamPlayers != null && userTeamPlayers.Count > 0)
                 {
-                    UserTeam? team = context.UserTeam.FirstOrDefault(item => item.user_id == userTeam.user_id && item.fixture_id == userTeam.fixture_id && item.player_id == userTeam.player_id);
-                    if (team != null)
+                    foreach (UserTeamPlayers userTeamPlayer in userTeamPlayers)
                     {
-                        team.is_captain = userTeam.is_captain;
-                        team.is_vice_captain = userTeam.is_vice_captain;
-                        context.UserTeam.Update(team);
-                        await context.SaveChangesAsync();
-                        rowsAffected++;
-                    }
+                        UserTeamPlayers? team = context.UserTeamPlayers.FirstOrDefault(item => item.user_team_id == userTeamPlayer.user_team_id && item.player_id == userTeamPlayer.player_id);
+                        if (team != null)
+                        {
+                            team.is_captain = userTeamPlayer.is_captain;
+                            team.is_vice_captain = userTeamPlayer.is_vice_captain;
+                            context.UserTeamPlayers.Update(team);
+                            await context.SaveChangesAsync();
+                            rowsAffected++;
+                        }
+                    } 
                 }
 
             }
