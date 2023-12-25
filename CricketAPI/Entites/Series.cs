@@ -7,6 +7,7 @@ namespace CricketAPI.Entites
     {
         [Key]
         public long id { get; set; }
+        public long series_id { get; set; }
 
         public long? league_id { get; set; }
         public string? image_path { get; set; }

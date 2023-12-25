@@ -34,6 +34,11 @@ namespace CricketAPI.Entites
     {
         public List<UserTeamPlayers>? userTeamPlayers { get; set; }
     }
+    public class UserDeleteTeamRequest
+    {
+        public long? user_team_id { get; set; }
+
+    }
     public class UserSaveTeamResponse
     {
         public int rowsAffected { get; set; }

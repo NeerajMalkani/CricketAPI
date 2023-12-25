@@ -147,6 +147,54 @@ namespace CricketAPI.Controllers
             }
             return response;
         }
+
+        [HttpPut]
+        [Route("teams/players")]
+        public async Task<Response> UpdateUserTeamPlayersAsync([FromBody] UserUpdateTeamRequest userUpdateTeamPlayers)
+        {
+            Response response = new Response();
+            try
+            {
+                int rowsAffected = await new UserRepository().UpdateUserTeamPlayers(_db, userUpdateTeamPlayers.userTeamPlayers);
+                if (rowsAffected > 0)
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+
+        [HttpDelete]
+        [Route("teams")]
+        public async Task<Response> DeleteUserTeam([FromBody] UserDeleteTeamRequest userDeleteTeamRequest)
+        {
+            Response response = new Response();
+            try
+            {
+                int rowsAffected = await new UserRepository().DeleteUserTeamPlayers(_db, userDeleteTeamRequest);
+                if (rowsAffected > 0)
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
         #endregion    
     }
 }

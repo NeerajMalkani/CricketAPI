@@ -42,6 +42,33 @@ namespace CricketAPI.Controllers
             }
             return response;
         }
+
+        [HttpGet]
+        [Route("trending/list")]
+        public Response GetTrendingSeries()
+        {
+            Response response = new Response();
+            try
+            {
+                List<Series> series = new SeriesRepository().GetTrendingSeries(_db);
+                if (series.Any())
+                {
+                    series = series.Where(x => x.starting_at > DateTime.Now.AddDays(-30)).ToList();
+                    series = series.OrderBy(x => x.starting_at).ToList();
+                    series = series.DistinctBy(x => x.league_id).ToList();
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, series);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, series);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
         #endregion
 
         #region Get Series Fixtures

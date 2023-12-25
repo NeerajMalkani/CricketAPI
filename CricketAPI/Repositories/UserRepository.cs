@@ -110,7 +110,63 @@ namespace CricketAPI.Repositories
                             await context.SaveChangesAsync();
                             rowsAffected++;
                         }
-                    } 
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                rowsAffected = 0;
+            }
+            return rowsAffected;
+        }
+
+        public async Task<int> UpdateUserTeamPlayers(DataContext context, List<UserTeamPlayers>? userTeamPlayers)
+        {
+            int rowsAffected = 0;
+            try
+            {
+                if (userTeamPlayers != null && userTeamPlayers.Count > 0)
+                {
+                    List<UserTeamPlayers>? prevTeam = context.UserTeamPlayers.Where(item => item.user_team_id == userTeamPlayers[0].user_team_id).ToList();
+                    if (prevTeam != null && prevTeam.Count > 0)
+                    {
+                        context.UserTeamPlayers.RemoveRange(prevTeam);
+                        await context.SaveChangesAsync();
+                        context.UserTeamPlayers.AddRange(userTeamPlayers);
+                        await context.SaveChangesAsync();
+                        rowsAffected++;
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                rowsAffected = 0;
+            }
+            return rowsAffected;
+        }
+
+        public async Task<int> DeleteUserTeamPlayers(DataContext context, UserDeleteTeamRequest userDeleteTeamRequest)
+        {
+            int rowsAffected = 0;
+            try
+            {
+                if (userDeleteTeamRequest != null && userDeleteTeamRequest.user_team_id != null)
+                {
+                    List<UserTeamPlayers>? prevTeamPlayers = context.UserTeamPlayers.Where(item => item.user_team_id == userDeleteTeamRequest.user_team_id).ToList();
+                    if (prevTeamPlayers != null && prevTeamPlayers.Count > 0)
+                    {
+                        context.UserTeamPlayers.RemoveRange(prevTeamPlayers);
+                        await context.SaveChangesAsync();
+                        UserTeam userTeam = context.UserTeam.Where(item => item.id == userDeleteTeamRequest.user_team_id).First();
+                        if (userTeam != null)
+                        {
+                            context.UserTeam.Remove(userTeam);
+                            await context.SaveChangesAsync();
+                        }
+                        rowsAffected++;
+                    }
                 }
 
             }

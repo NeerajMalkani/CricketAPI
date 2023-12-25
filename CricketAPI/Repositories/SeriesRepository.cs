@@ -26,6 +26,25 @@ namespace CricketAPI.Repositories
             return seriesLst;
         }
 
+        public List<Series> GetTrendingSeries(DataContext context)
+        {
+            List<Series> seriesLst = new List<Series>();
+            try
+            {
+                List<SeriesJson> seriesJsons = context.SeriesJson.FromSqlRaw("CALL `cric_Get_TrendingSeries`()").ToList();
+                if (seriesJsons.Count > 0)
+                {
+                    seriesLst = JsonConvert.DeserializeObject<List<Series>>(seriesJsons[0].Series) ?? throw new ArgumentException();
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return seriesLst;
+        }
+
         public List<Fixtures> GetSeriesFixtures(DataContext context, long series_id, long stage_id)
         {
             List<Fixtures> fixtures = new List<Fixtures>();
