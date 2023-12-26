@@ -150,6 +150,45 @@ namespace CricketAPI.Entites
         public List<Teamlineup>? teamlineup { get; set; }
         public int? user_team_id { get; set; }
         public string? user_team_name { get; set; }
-    } 
+    }
+    #endregion
+
+    #region All Team With Players Response
+    public class UserAllTeamWithPlayersJson
+    {
+        [Key]
+        public string UserAllTeamWithPlayers { get; set; } = "";
+    }
+
+    public class UserAllTeamWithPlayers
+    {
+        public UserAllTeams[]? teams { get; set; }
+    }
+
+    public class UserAllTeams
+    {
+        public long fixture_id { get; set; }
+        public int? league_id { get; set; }
+        public int? series_id { get; set; }
+        public string? stage_name { get; set; }
+        public string? league_name { get; set; }
+        public string? season_name { get; set; }
+        public string? note { get; set; }
+        public string? type { get; set; }
+        public string? round { get; set; }
+        public string? status { get; set; }
+        public long? team1_id { get; set; }
+        public string? team1_code { get; set; }
+        public string? team1_name { get; set; }
+        public string? team1_image_path { get; set; }
+        public long? team2_id { get; set; }
+        public string? team2_code { get; set; }
+        public string? team2_name { get; set; }
+        public string? team2_image_path { get; set; }
+        public List<Teamlineup>? teamlineup { get; set; }
+        public int? user_team_id { get; set; }
+        public string? user_team_name { get; set; }
+        public DateTime? starting_at { get; set; }
+    }
     #endregion
 }

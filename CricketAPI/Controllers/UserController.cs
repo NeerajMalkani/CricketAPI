@@ -99,6 +99,32 @@ namespace CricketAPI.Controllers
         }
 
         [HttpGet]
+        [Route("allteamswithplayers")]
+        public Response GetUserAllTeamWithPlayers([FromQuery] UserTeamRequest userTeamRequest)
+        {
+            Response response = new Response();
+            try
+            {
+                UserAllTeamWithPlayers? userAllTeamWithPlayers = new UserRepository().GetUserAllTeamWithPlayers(_db, userTeamRequest);
+                List<UserAllTeamWithPlayers> userAllTeamsWithPlayers = new List<UserAllTeamWithPlayers>();
+                if (userAllTeamWithPlayers != null && userAllTeamWithPlayers.teams != null)
+                {
+                    userAllTeamsWithPlayers.Add(userAllTeamWithPlayers);
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, userAllTeamsWithPlayers);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, userAllTeamsWithPlayers);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+
+        [HttpGet]
         [Route("teams/players")]
         public Response GetUserTeam([FromQuery] UserTeamRequest userTeamRequest)
         {

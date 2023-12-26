@@ -73,6 +73,25 @@ namespace CricketAPI.Repositories
             return userTeamWithPlayers;
         }
 
+        public UserAllTeamWithPlayers? GetUserAllTeamWithPlayers(DataContext context, UserTeamRequest userTeamRequest)
+        {
+            UserAllTeamWithPlayers? userAllTeamWithPlayers = new UserAllTeamWithPlayers();
+            try
+            {
+                List<UserAllTeamWithPlayersJson> userAllTeamJsons = context.UserAllTeamWithPlayersJson.FromSqlRaw("CALL `cric_Get_UserAllTeamWithPlayers`('" + userTeamRequest.user_id + "')").ToList();
+                if (userAllTeamJsons.Count > 0)
+                {
+                    userAllTeamWithPlayers = JsonConvert.DeserializeObject<UserAllTeamWithPlayers>(userAllTeamJsons[0].UserAllTeamWithPlayers) ?? throw new ArgumentException();
+                }
+
+            }
+            catch (Exception)
+            {
+                userAllTeamWithPlayers = new UserAllTeamWithPlayers();
+            }
+            return userAllTeamWithPlayers;
+        }
+
         public UserTeamLineup? GetUserTeamPlayers(DataContext context, UserTeamRequest userTeamRequest)
         {
             UserTeamLineup? userTeamLineup = new UserTeamLineup();
