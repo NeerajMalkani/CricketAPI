@@ -169,6 +169,13 @@ namespace CricketAPI.Controllers
             try
             {
                 Scoreboard? scorecard = new FixturesRepository().GetScorecard(_db, fixture_id);
+                if (scorecard != null && scorecard.scorecard != null)
+                {
+                    foreach (Scorecard scoreboard in scorecard.scorecard)
+                    {
+                        scoreboard.batting = scoreboard?.batting1?[0];
+                    }
+                }
                 FixturesTeamLineup? fixturesTeamLineup = new FixturesRepository().GetLineup(_db, fixture_id);
                 if (fixturesTeamLineup != null && fixturesTeamLineup.teamlineup != null && scorecard != null && scorecard.scorecard != null && scorecard.scorecard.Count > 0)
                 {
@@ -519,7 +526,7 @@ namespace CricketAPI.Controllers
 
                     fixturesBallsLst[0].balls?.Reverse();
                     fixturesBallsLst[0].balls = fixturesBallsLst[0].balls?.Skip(start_index).Take(count).ToList();
-                    
+
                     if (fixturesBallsLst[0] != null && fixturesBallsLst[0].miniscore != null && fixturesBallsLst[0]?.miniscore?.batting != null)
                     {
                         FixturesBalls? objFirstBall = fixturesBalls?.balls?.First();

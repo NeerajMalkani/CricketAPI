@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace CricketAPI
 {
@@ -148,6 +149,8 @@ namespace CricketAPI
         public string? team_name { get; set; }
         public string? scoreboard { get; set; }
         public MatchScore? match_score { get; set; }
+        [JsonIgnore]
+        public List<List<Batting>>? batting1 { get; set; }
         public List<Batting>? batting { get; set; }
         public List<Lineup>? yetToBat { get; set; }
         public List<Bowling>? bowling { get; set; }
