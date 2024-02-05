@@ -67,6 +67,30 @@ namespace CricketAPI.Controllers
             }
             return response;
         }
+
+        [HttpGet]
+        [Route("list")]
+        public Response GetContests([FromQuery] long fixture_id)
+        {
+            Response response = new Response();
+            try
+            {
+                List<Contests> contests = new ContestsRepository().GetContests(_db, fixture_id);
+                if (contests.Any())
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, contests);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, contests);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
         #endregion
     }
 }

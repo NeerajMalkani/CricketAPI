@@ -30,6 +30,7 @@
         public int entry_fees { get; set; }
         public int spots { get; set; }
         public int spots_filled { get; set; }
+        public int first_prize { get; set; }
         public int number_of_winners { get; set; }
     }
     #endregion

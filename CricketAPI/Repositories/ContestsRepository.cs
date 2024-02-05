@@ -193,6 +193,20 @@ namespace CricketAPI.Repositories
             await context.SaveChangesAsync();
             return rowsAffected;
         }
+
+        public List<Contests> GetContests(DataContext context, long fixture_id)
+        {
+            List<Contests> contests = new List<Contests>();
+            try
+            {
+                contests = context.Contests.Where(el => el.fixture_id == fixture_id).ToList();
+            }
+            catch (Exception)
+            {
+                contests = new List<Contests>();
+            }
+            return contests;
+        }
         #endregion
     }
 }
