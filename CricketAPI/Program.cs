@@ -17,7 +17,10 @@ builder.Services.AddDbContext<DataContext>(
         );
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpClient();
 var app = builder.Build();
+var loggerFactory = app.Services.GetService<ILoggerFactory>();
+loggerFactory.AddFile(builder.Configuration["Logging:LogFilePath"].ToString());  
 //app.UseMiddleware<ApiKeyMiddleware>();
 app.UseCors(builder =>
 {
@@ -35,6 +38,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
