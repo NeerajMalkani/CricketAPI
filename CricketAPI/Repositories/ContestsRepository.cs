@@ -191,6 +191,7 @@ namespace CricketAPI.Repositories
             int rowsAffected = 0;
             context.Contests.Add(contests);
             await context.SaveChangesAsync();
+            rowsAffected = 1;
             return rowsAffected;
         }
 
