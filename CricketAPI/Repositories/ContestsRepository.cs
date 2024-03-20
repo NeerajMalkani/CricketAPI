@@ -19,7 +19,7 @@ namespace CricketAPI.Repositories
         public List<PrizePool> CalculatePrizePool(PrizePoolRequest prizePoolRequest)
         {
             List<PrizePool> prizePools = new List<PrizePool>();
-            if (prizePoolRequest.entryFees > 0 && prizePoolRequest.spots > 1)
+            if (prizePoolRequest.entryFees >= 0 && prizePoolRequest.spots > 1)
             {
                 List<int> breakPoints = new List<int>() { 1, 2, 3, 4, 5, 7, 10, 15, 25, 50, 100, 250, 500, 1000, 2000, 5000 };
                 int totalWinnings = prizePoolRequest.entryFees * prizePoolRequest.spots;
@@ -191,6 +191,7 @@ namespace CricketAPI.Repositories
             int rowsAffected = 0;
             context.Contests.Add(contests);
             await context.SaveChangesAsync();
+            rowsAffected = 1;
             return rowsAffected;
         }
 
