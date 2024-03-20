@@ -194,6 +194,14 @@ namespace CricketAPI.Repositories
             return rowsAffected;
         }
 
+        public async Task<int> InsertUserContests(DataContext context, UserJoinedContests userJoinedContests)
+        {
+            int rowsAffected = 0;
+            context.UserJoinedContests.Add(userJoinedContests);
+            await context.SaveChangesAsync();
+            return rowsAffected;
+        }
+
         public List<Contests> GetContests(DataContext context, long fixture_id)
         {
             List<Contests> contests = new List<Contests>();

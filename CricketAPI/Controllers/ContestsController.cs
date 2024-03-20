@@ -68,6 +68,30 @@ namespace CricketAPI.Controllers
             return response;
         }
 
+        [HttpPost]
+        [Route("user/add")]
+        public async Task<Response> InsertUserContestAsync([FromBody] UserJoinedContests userJoinedContests)
+        {
+            Response response = new Response();
+            try
+            {
+                int rowsAffected = await new ContestsRepository().InsertUserContests(_db, userJoinedContests);
+                if (rowsAffected > 0)
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+
         [HttpGet]
         [Route("list")]
         public Response GetContests([FromQuery] long fixture_id)

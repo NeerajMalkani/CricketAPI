@@ -34,5 +34,13 @@
         public int max_prize_pool { get; set; }
         public int number_of_winners { get; set; }
     }
+
+    public class UserJoinedContests
+    {
+        public long id { get; set; }
+        public string? user_id { get; set; }
+        public long contest_id { get; set; }
+        public string? updated_at { get; set; }
+    }
     #endregion
 }
