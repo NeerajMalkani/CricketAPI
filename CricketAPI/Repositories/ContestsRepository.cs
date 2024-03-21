@@ -1,5 +1,6 @@
 ﻿using CricketAPI.Entites;
 using CricketAPI.Helpers;
+using System.Linq;
 
 namespace CricketAPI.Repositories
 {
@@ -186,13 +187,13 @@ namespace CricketAPI.Repositories
         #endregion
 
         #region Contests
-        public async Task<int> InsertContests (DataContext context, Contests contests)
+        public async Task<long> InsertContests(DataContext context, Contests contests)
         {
-            int rowsAffected = 0;
+            long insertedID = 0;
             context.Contests.Add(contests);
             await context.SaveChangesAsync();
-            rowsAffected = 1;
-            return rowsAffected;
+            insertedID = contests.id;
+            return insertedID;
         }
 
         public async Task<int> InsertUserContests(DataContext context, UserJoinedContests userJoinedContests)
@@ -200,6 +201,7 @@ namespace CricketAPI.Repositories
             int rowsAffected = 0;
             context.UserJoinedContests.Add(userJoinedContests);
             await context.SaveChangesAsync();
+            rowsAffected = 1;
             return rowsAffected;
         }
 
@@ -209,6 +211,23 @@ namespace CricketAPI.Repositories
             try
             {
                 contests = context.Contests.Where(el => el.fixture_id == fixture_id).ToList();
+            }
+            catch (Exception)
+            {
+                contests = new List<Contests>();
+            }
+            return contests;
+        }
+
+        public List<Contests> GetUserContests(DataContext context, ContestRequest contestRequest)
+        {
+            List<Contests> contests = new List<Contests>();
+            try
+            {
+                contests = (from ujc in context.UserJoinedContests
+                              join c in context.Contests on ujc.contest_id equals c.id
+                              where ujc.fixture_id == contestRequest.fixture_id && ujc.user_id == contestRequest.user_id
+                              select c).ToList();
             }
             catch (Exception)
             {

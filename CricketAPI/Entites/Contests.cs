@@ -35,10 +35,22 @@
         public int number_of_winners { get; set; }
     }
 
-    public class UserJoinedContests
+    public class ContestRequest
+    {
+        public long fixture_id { get; set; }
+        public string? user_id { get; set; }
+    }
+
+    public class ContestResponse
+    {
+        public long contest_id { get; set; }
+    }
+
+        public class UserJoinedContests
     {
         public long id { get; set; }
         public string? user_id { get; set; }
+        public long fixture_id { get; set; }
         public long contest_id { get; set; }
         public string? updated_at { get; set; }
     }

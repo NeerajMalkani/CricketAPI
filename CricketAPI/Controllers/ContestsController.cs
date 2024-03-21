@@ -51,10 +51,15 @@ namespace CricketAPI.Controllers
             Response response = new Response();
             try
             {
-                int rowsAffected = await new ContestsRepository().InsertContests(_db, contests);
-                if (rowsAffected > 0)
+                long insertedContestID = await new ContestsRepository().InsertContests(_db, contests);
+                if (insertedContestID > 0)
                 {
-                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response);
+                    List<ContestResponse> contestResponses = new List<ContestResponse>();
+                    contestResponses.Add(new ContestResponse()
+                    {
+                        contest_id = insertedContestID,
+                    });
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, contestResponses);
                 }
                 else
                 {
@@ -100,6 +105,30 @@ namespace CricketAPI.Controllers
             try
             {
                 List<Contests> contests = new ContestsRepository().GetContests(_db, fixture_id);
+                if (contests.Any())
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, contests);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, contests);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+
+        [HttpGet]
+        [Route("user/list")]
+        public Response GetUserContests([FromQuery] ContestRequest contestRequest)
+        {
+            Response response = new Response();
+            try
+            {
+                List<Contests> contests = new ContestsRepository().GetUserContests(_db, contestRequest);
                 if (contests.Any())
                 {
                     Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, contests);
