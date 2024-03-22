@@ -43,6 +43,12 @@ namespace CricketAPI.Entites
         public string? user_id { get; set; }
     }
 
+    public class ContestFixtuesRequest
+    {
+        public string? type { get; set; }
+        public string? user_id { get; set; }
+    }
+
     public class ContestResponse
     {
         public long contest_id { get; set; }

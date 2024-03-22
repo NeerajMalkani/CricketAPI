@@ -239,6 +239,43 @@ namespace CricketAPI.Repositories
             }
             return getContestResponse;
         }
+
+        public List<Fixtures> GetContestFixtures(DataContext context, ContestFixtuesRequest contestFixtuesRequest)
+        {
+            List<Fixtures> fixtures = new List<Fixtures>();
+            try
+            {
+                switch (contestFixtuesRequest.type)
+                {
+                    case "upcoming":
+                        List<FixturesJson> fixturesUpcomingJson = context.FixturesJson.FromSqlRaw("CALL `cric_Get_UpcomingFixturesContests`('" + contestFixtuesRequest.user_id + "')").ToList();
+                        if (!fixturesUpcomingJson[0].Fixtures.Equals("[]"))
+                        {
+                            fixtures = JsonConvert.DeserializeObject<List<Fixtures>>(fixturesUpcomingJson[0].Fixtures) ?? throw new ArgumentException();
+                        }
+                        break;
+                    case "recent":
+                        List<FixturesJson> fixturesRecentJson = context.FixturesJson.FromSqlRaw("CALL `cric_Get_RecentFixturesContests`('" + contestFixtuesRequest.user_id + "')").ToList();
+                        if (!fixturesRecentJson[0].Fixtures.Equals("[]"))
+                        {
+                            fixtures = JsonConvert.DeserializeObject<List<Fixtures>>(fixturesRecentJson[0].Fixtures) ?? throw new ArgumentException();
+                        }
+                        break;
+                    case "live":
+                        List<FixturesJson> fixturesLiveJson = context.FixturesJson.FromSqlRaw("CALL `cric_GetLiveFixturesContests`('" + contestFixtuesRequest.user_id + "')").ToList();
+                        if (!fixturesLiveJson[0].Fixtures.Equals("[]"))
+                        {
+                            fixtures = JsonConvert.DeserializeObject<List<Fixtures>>(fixturesLiveJson[0].Fixtures) ?? throw new ArgumentException();
+                        }
+                        break;
+                }
+            }
+            catch (Exception)
+            {
+                fixtures = new List<Fixtures>();
+            }
+            return fixtures;
+        }
         #endregion
     }
 }
