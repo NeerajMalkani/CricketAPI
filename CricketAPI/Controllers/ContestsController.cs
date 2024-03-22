@@ -128,7 +128,7 @@ namespace CricketAPI.Controllers
             Response response = new Response();
             try
             {
-                List<Contests> contests = new ContestsRepository().GetUserContests(_db, contestRequest);
+                List<GetContestResponse> contests = new ContestsRepository().GetUserContests(_db, contestRequest);
                 if (contests.Any())
                 {
                     Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, contests);

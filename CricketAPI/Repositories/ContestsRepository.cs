@@ -1,5 +1,7 @@
 ﻿using CricketAPI.Entites;
 using CricketAPI.Helpers;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Linq;
 
 namespace CricketAPI.Repositories
@@ -210,7 +212,7 @@ namespace CricketAPI.Repositories
             List<Contests> contests = new List<Contests>();
             try
             {
-                contests = context.Contests.Where(el => el.fixture_id == fixture_id).ToList();
+                contests = context.Contests.Where(el => el.fixture_id == fixture_id && el.created_by == "system").ToList();
             }
             catch (Exception)
             {
@@ -219,21 +221,23 @@ namespace CricketAPI.Repositories
             return contests;
         }
 
-        public List<Contests> GetUserContests(DataContext context, ContestRequest contestRequest)
+        public List<GetContestResponse> GetUserContests(DataContext context, ContestRequest contestRequest)
         {
-            List<Contests> contests = new List<Contests>();
+            List<GetContestResponse> getContestResponse = new List<GetContestResponse>();
             try
             {
-                contests = (from ujc in context.UserJoinedContests
-                              join c in context.Contests on ujc.contest_id equals c.id
-                              where ujc.fixture_id == contestRequest.fixture_id && ujc.user_id == contestRequest.user_id
-                              select c).ToList();
+                List<ContestsJson> contestsJsons = context.ContestsJson.FromSqlRaw("CALL `cric_Get_UserContest`(" + contestRequest.fixture_id + ", '" + contestRequest.user_id + "')").ToList();
+                if (contestsJsons.Count > 0)
+                {
+                    getContestResponse = JsonConvert.DeserializeObject<List<GetContestResponse>>(contestsJsons[0].Contests) ?? throw new ArgumentException();
+                }
+
             }
             catch (Exception)
             {
-                contests = new List<Contests>();
+                getContestResponse = new List<GetContestResponse>();
             }
-            return contests;
+            return getContestResponse;
         }
         #endregion
     }

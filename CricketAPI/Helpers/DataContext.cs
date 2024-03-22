@@ -41,5 +41,6 @@ namespace CricketAPI.Helpers
         public DbSet<UserTeamLineupJson> UserTeamLineupJson => Set<UserTeamLineupJson>();
         public DbSet<Contests> Contests => Set<Contests>();
         public DbSet<UserJoinedContests> UserJoinedContests => Set<UserJoinedContests>();
+        public DbSet<ContestsJson> ContestsJson => Set<ContestsJson>();
     }
 }

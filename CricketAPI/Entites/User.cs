@@ -10,6 +10,7 @@ namespace CricketAPI.Entites
         [Key]
         public long id { get; set; }
         public string? user_id { get; set; }
+        public long? contest_id { get; set; }
         public long? fixture_id { get; set; }
         public string? team_name { get; set; }
 
