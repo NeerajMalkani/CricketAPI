@@ -14,16 +14,19 @@ namespace CricketAPI.Repositories
             {
                 if (userSaveTeamRequest != null && userSaveTeamRequest.userTeam != null && userSaveTeamRequest.userTeamPlayers != null && userSaveTeamRequest.userTeamPlayers.Count > 0)
                 {
-                    context.UserTeam.Add(userSaveTeamRequest.userTeam);
-                    await context.SaveChangesAsync();
-
+                    UserTeam? userTeam = context.UserTeam.ToList().Where(el => el.user_id == userSaveTeamRequest.userTeam.user_id && el.fixture_id == userSaveTeamRequest.userTeam.fixture_id && el.contest_id == userSaveTeamRequest.userTeam.contest_id).FirstOrDefault();
+                    if (userTeam == null || userTeam?.id == 0)
+                    {
+                        context.UserTeam.Add(userSaveTeamRequest.userTeam);
+                        await context.SaveChangesAsync();
+                    }
                     foreach (UserTeamPlayers team in userSaveTeamRequest.userTeamPlayers)
                     {
-                        team.user_team_id = userSaveTeamRequest.userTeam.id;
+                        team.user_team_id = userTeam == null ? userSaveTeamRequest.userTeam.id : userTeam.id;
                         context.UserTeamPlayers.Add(team);
                     }
                     await context.SaveChangesAsync();
-                    userSaveTeamResponse.user_team_id = userSaveTeamRequest.userTeam.id;
+                    userSaveTeamResponse.user_team_id = userTeam == null ? userSaveTeamRequest.userTeam.id : userTeam.id;
                     userSaveTeamResponse.rowsAffected = 1;
                 }
 

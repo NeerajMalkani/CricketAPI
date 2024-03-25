@@ -123,30 +123,6 @@ namespace CricketAPI.Controllers
         }
 
         [HttpGet]
-        [Route("user/list")]
-        public Response GetUserContests([FromQuery] ContestRequest contestRequest)
-        {
-            Response response = new Response();
-            try
-            {
-                List<GetContestResponse> contests = new ContestsRepository().GetUserContests(_db, contestRequest);
-                if (contests.Any())
-                {
-                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, contests);
-                }
-                else
-                {
-                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, contests);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
-            }
-            return response;
-        }
-
-        [HttpGet]
         [Route("user/matches/list")]
         public Response GetFixtures([FromQuery] ContestFixtuesRequest contestFixtues)
         {
@@ -208,6 +184,121 @@ namespace CricketAPI.Controllers
                 else
                 {
                     Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, fixtures);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+
+        [HttpGet]
+        [Route("user/list")]
+        public Response GetUserContests([FromQuery] ContestRequest contestRequest)
+        {
+            Response response = new Response();
+            try
+            {
+                List<GetContestResponse> contests = new ContestsRepository().GetUserContests(_db, contestRequest);
+                if (contests.Any())
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, contests);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, contests);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+
+        [HttpGet]
+        [Route("user/winnings")]
+        public Response GetUserWinnings([FromQuery] long contest_id)
+        {
+            Response response = new Response();
+            try
+            {
+                Contests? contest = new ContestsRepository().GetUserContest(_db, contest_id);
+                if (contest != null)
+                {
+                    PrizePoolRequest prizePoolRequest = new PrizePoolRequest()
+                    {
+                        entryFees = contest.entry_fees,
+                        spots = contest.spots
+                    };
+                    List<PrizePool> prizePools = new ContestsRepository().CalculatePrizePool(prizePoolRequest);
+                    if (prizePools.Any())
+                    {
+                        prizePools = prizePools.Where(el => el.breakPoint == contest.number_of_winners).ToList();
+                        Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, prizePools);
+                    }
+                    else
+                    {
+                        Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, prizePools);
+                    }
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, new List<Contests>());
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+
+        [HttpGet]
+        [Route("user/leaderboard")]
+        public Response GetUserContestsLeaderboard([FromQuery] ContestLeaderboardRequest contestLeaderboardRequest)
+        {
+            Response response = new Response();
+            try
+            {
+                List<ContestLeaderboard> contestLeaderboards = new List<ContestLeaderboard>(); 
+                ContestLeaderboard contestsLeaderboard = new ContestsRepository().GetUserContestLeaderboard(_db, contestLeaderboardRequest);
+                if (contestsLeaderboard != null)
+                {
+                    contestsLeaderboard.leaderboard = contestsLeaderboard.leaderboard?.OrderByDescending(el => el.team_points).ToList();
+                    contestLeaderboards.Add(contestsLeaderboard);
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, contestLeaderboards);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, contestLeaderboards);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+
+        [HttpGet]
+        [Route("user/stats")]
+        public Response GetUserContestsStats([FromQuery] ContestUserStatsRequest contestLeaderboardRequest)
+        {
+            Response response = new Response();
+            try
+            {
+                List<UserTeamStats> userTeamStats = new List<UserTeamStats>();
+                UserTeamStats userTeamStat = new ContestsRepository().GetUserContestUserStats(_db, contestLeaderboardRequest);
+                if (userTeamStat != null)
+                {
+                    userTeamStats.Add(userTeamStat);
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, userTeamStats);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, userTeamStats);
                 }
             }
             catch (Exception ex)

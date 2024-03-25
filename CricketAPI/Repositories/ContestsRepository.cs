@@ -24,7 +24,7 @@ namespace CricketAPI.Repositories
             List<PrizePool> prizePools = new List<PrizePool>();
             if (prizePoolRequest.entryFees >= 0 && prizePoolRequest.spots > 1)
             {
-                List<int> breakPoints = new List<int>() { 1, 2, 3, 4, 5, 7, 10, 15, 25, 50, 100, 250, 500, 1000, 2000, 5000 };
+                List<int> breakPoints = new List<int>() { 1, 2, 3, 4, 5, 7, 10, 15, 25, 50, 100, 250, 500, 1000, 2000, 2500, 5000 };
                 int totalWinnings = prizePoolRequest.entryFees * prizePoolRequest.spots;
                 int ssCommission = Convert.ToInt32(Math.Round(totalWinnings * Convert.ToDecimal(Convert.ToDecimal(20) / 100)));
                 int remainingWinnigs = totalWinnings - ssCommission;
@@ -161,6 +161,17 @@ namespace CricketAPI.Repositories
                                 pools.Add(SetPoolObject(remainingWinnigs, 501, 1000, 0.04));
                                 pools.Add(SetPoolObject(remainingWinnigs, 1001, 2000, 0.03));
                                 break;
+                            case 2500:
+                                pools.Add(SetPoolObject(remainingWinnigs, 1, 1, 5));
+                                pools.Add(SetPoolObject(remainingWinnigs, 2, 2, 3));
+                                pools.Add(SetPoolObject(remainingWinnigs, 3, 3, 2));
+                                pools.Add(SetPoolObject(remainingWinnigs, 4, 10, 1));
+                                pools.Add(SetPoolObject(remainingWinnigs, 11, 50, 0.2));
+                                pools.Add(SetPoolObject(remainingWinnigs, 51, 100, 0.1));
+                                pools.Add(SetPoolObject(remainingWinnigs, 101, 500, 0.05));
+                                pools.Add(SetPoolObject(remainingWinnigs, 501, 1000, 0.04));
+                                pools.Add(SetPoolObject(remainingWinnigs, 1001, 2500, 0.03));
+                                break;
                             case 5000:
                                 pools.Add(SetPoolObject(remainingWinnigs, 1, 1, 4));
                                 pools.Add(SetPoolObject(remainingWinnigs, 2, 2, 2));
@@ -201,9 +212,13 @@ namespace CricketAPI.Repositories
         public async Task<int> InsertUserContests(DataContext context, UserJoinedContests userJoinedContests)
         {
             int rowsAffected = 0;
-            context.UserJoinedContests.Add(userJoinedContests);
-            await context.SaveChangesAsync();
-            rowsAffected = 1;
+            UserJoinedContests? userJoinedContestsExists = context.UserJoinedContests.ToList().Where(el => el.user_id == userJoinedContests.user_id && el.fixture_id == userJoinedContests.fixture_id && el.contest_id == userJoinedContests.contest_id).FirstOrDefault();
+            if (userJoinedContestsExists == null || userJoinedContestsExists?.id == 0)
+            {
+                context.UserJoinedContests.Add(userJoinedContests);
+                await context.SaveChangesAsync();
+                rowsAffected = 1;
+            }
             return rowsAffected;
         }
 
@@ -275,6 +290,56 @@ namespace CricketAPI.Repositories
                 fixtures = new List<Fixtures>();
             }
             return fixtures;
+        }
+
+        public Contests? GetUserContest(DataContext context, long contest_id)
+        {
+            Contests? contest = new Contests();
+            try
+            {
+                contest = context.Contests.Where(el => el.id == contest_id).ToList().FirstOrDefault();
+            }
+            catch (Exception)
+            {
+                contest = new Contests();
+            }
+            return contest;
+        }
+
+        public ContestLeaderboard GetUserContestLeaderboard(DataContext context, ContestLeaderboardRequest contestLeaderboardRequest)
+        {
+            ContestLeaderboard contestLeaderboards = new ContestLeaderboard();
+            try
+            {
+                List<ContestsLeaderboardJson> contestsLeaderboardJsons = context.ContestsLeaderboardJson.FromSqlRaw("CALL `cric_Get_Leaderboard`(" + contestLeaderboardRequest.fixture_id + ", " + contestLeaderboardRequest.contest_id + ")").ToList();
+                if (contestsLeaderboardJsons.Count > 0)
+                {
+                    contestLeaderboards = JsonConvert.DeserializeObject<ContestLeaderboard>(contestsLeaderboardJsons[0].ContestLeaderboard) ?? throw new ArgumentException();
+                }
+            }
+            catch (Exception)
+            {
+                contestLeaderboards = new ContestLeaderboard();
+            }
+            return contestLeaderboards;
+        }
+
+        public UserTeamStats GetUserContestUserStats(DataContext context, ContestUserStatsRequest contestLeaderboardRequest)
+        {
+            UserTeamStats userTeamStats = new UserTeamStats();
+            try
+            {
+                List<UserTeamPointsJson> contestsLeaderboardJsons = context.UserTeamPointsJson.FromSqlRaw("CALL `cric_Get_UserTeamPlayerPoints`('" + contestLeaderboardRequest.user_id + "', " + contestLeaderboardRequest.fixture_id + ", " + contestLeaderboardRequest.contest_id + ")").ToList();
+                if (contestsLeaderboardJsons.Count > 0)
+                {
+                    userTeamStats = JsonConvert.DeserializeObject<UserTeamStats>(contestsLeaderboardJsons[0].UserTeamStats) ?? throw new ArgumentException();
+                }
+            }
+            catch (Exception)
+            {
+                userTeamStats = new UserTeamStats();
+            }
+            return userTeamStats;
         }
         #endregion
     }
