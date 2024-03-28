@@ -14,7 +14,7 @@ namespace CricketAPI.Repositories
             {
                 if (userSaveTeamRequest != null && userSaveTeamRequest.userTeam != null && userSaveTeamRequest.userTeamPlayers != null && userSaveTeamRequest.userTeamPlayers.Count > 0)
                 {
-                    UserTeam? userTeam = context.UserTeam.ToList().Where(el => el.user_id == userSaveTeamRequest.userTeam.user_id && el.fixture_id == userSaveTeamRequest.userTeam.fixture_id && el.contest_id == userSaveTeamRequest.userTeam.contest_id).FirstOrDefault();
+                    UserTeam? userTeam = context.UserTeam.ToList().Where(el => el.user_id == userSaveTeamRequest.userTeam.user_id && el.fixture_id == userSaveTeamRequest.userTeam.fixture_id && el.contest_id == userSaveTeamRequest.userTeam.contest_id && el.team_name == userSaveTeamRequest.userTeam.team_name).FirstOrDefault();
                     if (userTeam == null || userTeam?.id == 0)
                     {
                         context.UserTeam.Add(userSaveTeamRequest.userTeam);
