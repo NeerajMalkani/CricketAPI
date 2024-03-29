@@ -100,8 +100,10 @@ namespace CricketAPI.Controllers
             {
                 FixturesTeamLineup? fixturesTeamLineup = new TeamsRepository().GetLineup(_db, fixture_id);
                 List<FixturesTeamLineup> fixturesTeamLineups = new List<FixturesTeamLineup>();
-                if (fixturesTeamLineup != null && fixturesTeamLineup.teamlineup != null)
+                if (fixturesTeamLineup != null && fixturesTeamLineup.teamlineup != null && fixturesTeamLineup.teamlineup.Count > 1)
                 {
+                    fixturesTeamLineup.teamlineup[0].team = TeamsRepository.ApplyPointsToPlayers(fixturesTeamLineup.teamlineup[0].team);
+                    fixturesTeamLineup.teamlineup[1].team = TeamsRepository.ApplyPointsToPlayers(fixturesTeamLineup.teamlineup[1].team);
                     fixturesTeamLineups.Add(fixturesTeamLineup);
                 }
                 Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, fixturesTeamLineups);

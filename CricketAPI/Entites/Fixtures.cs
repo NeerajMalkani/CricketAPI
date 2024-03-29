@@ -185,7 +185,11 @@ namespace CricketAPI
         public int? sort { get; set; }
         public string? player_dob { get; set; }
         public string? player_fullname { get; set; }
+        public int? player_runs { get; set; }
+        public int? player_wickets { get; set; }
         public decimal player_points { get; set; }
+        public int? player_series_points { get; set; }
+        public bool played_last_match { get; set; }
         public int? player_position { get; set; }
         public string? player_image_path { get; set; }
         public string? player_is_captain { get; set; }
