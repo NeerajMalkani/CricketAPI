@@ -256,6 +256,32 @@ namespace CricketAPI.Controllers
         }
 
         [HttpGet]
+        [Route("user/contest")]
+        public Response GetUserContest([FromQuery] long contest_id)
+        {
+            Response response = new Response();
+            try
+            {
+                Contests? contest = new ContestsRepository().GetUserContest(_db, contest_id);
+                if (contest != null)
+                {
+                    List<Contests> contests = new List<Contests>();
+                    contests.Add(contest);
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, contests);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, new List<Contests>());
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+
+        [HttpGet]
         [Route("user/leaderboard")]
         public Response GetUserContestsLeaderboard([FromQuery] ContestLeaderboardRequest contestLeaderboardRequest)
         {

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace CricketAPI.Entites
 {
@@ -8,7 +9,6 @@ namespace CricketAPI.Entites
         [Key]
         public long id { get; set; }
         public long series_id { get; set; }
-
         public long? league_id { get; set; }
         public string? image_path { get; set; }
         public string? league_type { get; set; }
@@ -38,11 +38,11 @@ namespace CricketAPI.Entites
         public int? position { get; set; }
         public int? runs_for { get; set; }
         public int? legend_id { get; set; }
-        public double? overs_for { get; set; }     
+        public double? overs_for { get; set; }
         public string? recent_form { get; set; }
         public int? runs_against { get; set; }
         public double? overs_against { get; set; }
-        public double? netto_run_rate { get; set; }       
+        public double? netto_run_rate { get; set; }
         public string? legend_description { get; set; }
     }
     public class Standings
@@ -74,7 +74,7 @@ namespace CricketAPI.Entites
     public class SeriesTeams
     {
         [Key]
-        public int id { get; set; }  
+        public int id { get; set; }
         public int? league_id { get; set; }
         public string? image_path { get; set; }
         public string? league_type { get; set; }
@@ -86,6 +86,31 @@ namespace CricketAPI.Entites
     {
         [Key]
         public string SeriesTeams { get; set; } = "";
+    }
+
+    public class LastSeries
+    {
+        [Key]
+        public long player_id { get; set; }
+        public string? fullname { get; set; }
+        public int? points { get; set; }
+    }
+    public class UpdateSeriesPoints
+    {
+        [Key]
+        public long player_id { get; set; }
+        public long series_id { get; set; }
+        public decimal? points { get; set; }
+    }
+
+    public class SeriesTeamPlayers
+    {
+        [Key]
+        public long id { get; set; }
+        public long player_id { get; set; }
+        public long team_id { get; set; }
+        public long season_id { get; set; }
+        public decimal? points { get; set; }
     }
     #endregion 
 }

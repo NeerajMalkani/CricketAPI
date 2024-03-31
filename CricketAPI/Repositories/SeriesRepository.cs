@@ -72,7 +72,7 @@ namespace CricketAPI.Repositories
                 if (standingsJson.Count > 0)
                 {
                     Standings standingsObj = JsonConvert.DeserializeObject<Standings>(standingsJson[0].Standings) ?? throw new ArgumentException();
-                    if(standingsObj != null)
+                    if (standingsObj != null)
                     {
                         standingsLst.Add(standingsObj);
                     }
@@ -107,6 +107,44 @@ namespace CricketAPI.Repositories
                 teamsLst = new List<SeriesTeams>();
             }
             return teamsLst;
+        }
+
+        public List<LastSeries> GetLastSeries(DataContext context, long series_id)
+        {
+            List<LastSeries> lastSeries = new List<LastSeries>();
+            try
+            {
+                lastSeries = context.LastSeries.FromSqlRaw("CALL `cric_Get_LastSeriesPoints`(" + series_id + ")").ToList();
+            }
+            catch (Exception)
+            {
+                lastSeries = new List<LastSeries>();
+            }
+            return lastSeries;
+        }
+
+        public int UpdateSeriesTeamPlayers(DataContext context, List<UpdateSeriesPoints> updateSeriesPoints)
+        {
+            int rowsAffected = 0;
+            try
+            {
+                foreach (UpdateSeriesPoints updateSeries in updateSeriesPoints)
+                {
+                    SeriesTeamPlayers? seriesTeamPlayers = context.SeriesTeamPlayers.ToList().Where(el => el.season_id == updateSeries.series_id && el.player_id == updateSeries.player_id).FirstOrDefault();
+                    if (seriesTeamPlayers != null)
+                    {
+                        seriesTeamPlayers.points = updateSeries.points;
+                        context.SaveChanges();
+                        rowsAffected = rowsAffected + 1;
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                rowsAffected = 0;
+            }
+            return rowsAffected;
         }
     }
 }
