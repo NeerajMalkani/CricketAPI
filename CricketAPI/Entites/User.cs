@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace CricketAPI.Entites
 {
@@ -112,6 +113,7 @@ namespace CricketAPI.Entites
     public class Teamlineup
     {
         public long? team_id { get; set; }
+        [JsonIgnore]
         public long? contest_id { get; set; }
         public string? team_name { get; set; }
         public string? team_color { get; set; }
@@ -151,6 +153,8 @@ namespace CricketAPI.Entites
     public class TeamWithPlayers
     {
         public List<Teamlineup>? teamlineup { get; set; }
+        public long? contest_id { get; set; }
+        public string? contest_name { get; set; }
         public int? user_team_id { get; set; }
         public string? user_team_name { get; set; }
     }

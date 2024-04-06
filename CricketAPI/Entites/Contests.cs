@@ -36,8 +36,14 @@ namespace CricketAPI.Entites
         public int max_prize_pool { get; set; }
         public int number_of_winners { get; set; }
     }
+    public class ContestsHome
+    {
+        public int contest_count { get; set; }
+        public int teams_count { get; set; }
+    }
 
-    public class ContestRequest
+
+        public class ContestRequest
     {
         public long fixture_id { get; set; }
         public string? user_id { get; set; }
@@ -179,6 +185,12 @@ namespace CricketAPI.Entites
         [Key]
         public string UserTeamStats { get; set; } = "";
     }
-    
+
+    public class UserContestWithTeamRequest
+    {
+        public long contest_id { get; set; }
+        public long user_team_id { get; set; }
+    }
+
     #endregion
 }

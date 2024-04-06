@@ -98,6 +98,30 @@ namespace CricketAPI.Controllers
             return response;
         }
 
+        [HttpPut]
+        [Route("userteam")]
+        public async Task<Response> UpdateUserContestWithTeamAsync([FromBody] UserContestWithTeamRequest userContestWithTeamRequest)
+        {
+            Response response = new Response();
+            try
+            {
+                int rowsAffected = await new ContestsRepository().UpdateUserContestWithTeam(_db, userContestWithTeamRequest);
+                if (rowsAffected > 0)
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+
         [HttpGet]
         [Route("list")]
         public Response GetContests([FromQuery] long fixture_id)
@@ -106,6 +130,30 @@ namespace CricketAPI.Controllers
             try
             {
                 List<Contests> contests = new ContestsRepository().GetContests(_db, fixture_id);
+                if (contests.Any())
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, contests);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, contests);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+
+        [HttpGet]
+        [Route("home")]
+        public Response GetContestHome([FromQuery] ContestRequest contestRequest)
+        {
+            Response response = new Response();
+            try
+            {
+                List<ContestsHome> contests = new ContestsRepository().GetContestsHome(_db, contestRequest);
                 if (contests.Any())
                 {
                     Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, contests);

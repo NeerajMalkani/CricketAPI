@@ -222,6 +222,19 @@ namespace CricketAPI.Repositories
             return rowsAffected;
         }
 
+        public async Task<int> UpdateUserContestWithTeam(DataContext context, UserContestWithTeamRequest userContestWithTeamRequest)
+        {
+            int rowsAffected = 0;
+            UserTeam? userTeam = context.UserTeam.ToList().Where(el => el.id == userContestWithTeamRequest.user_team_id).FirstOrDefault();
+            if (userTeam != null)
+            {
+                userTeam.contest_id = userContestWithTeamRequest.contest_id;
+                await context.SaveChangesAsync();
+                rowsAffected = 1;
+            }
+            return rowsAffected;
+        }
+
         public List<Contests> GetContests(DataContext context, long fixture_id)
         {
             List<Contests> contests = new List<Contests>();
@@ -232,6 +245,27 @@ namespace CricketAPI.Repositories
             catch (Exception)
             {
                 contests = new List<Contests>();
+            }
+            return contests;
+        }
+
+        public List<ContestsHome> GetContestsHome(DataContext context, ContestRequest contestRequest)
+        {
+            List<ContestsHome> contests = new List<ContestsHome>();
+            List<UserJoinedContests> userJoinedContests = new List<UserJoinedContests>();
+            List<UserTeam> userTeam = new List<UserTeam>();
+            try
+            {
+                userJoinedContests = context.UserJoinedContests.Where(el => el.fixture_id == contestRequest.fixture_id && el.user_id == contestRequest.user_id).ToList();
+                userTeam = context.UserTeam.Where(el => el.fixture_id == contestRequest.fixture_id && el.user_id == contestRequest.user_id).ToList();
+                ContestsHome contestsHome = new ContestsHome();
+                contestsHome.contest_count = userJoinedContests.Count;
+                contestsHome.teams_count = userTeam.Count;
+                contests.Add(contestsHome);
+            }
+            catch (Exception)
+            {
+                contests = new List<ContestsHome>();
             }
             return contests;
         }
