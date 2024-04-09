@@ -381,6 +381,32 @@ namespace CricketAPI.Controllers
             }
             return response;
         }
+
+        [HttpGet]
+        [Route("user/team/player/stats")]
+        public Response GetUserTeamPlayerStats([FromQuery] UserTeamRequest userTeamRequest)
+        {
+            Response response = new Response();
+            try
+            {
+                List<UserTeamStats> userTeamStats = new List<UserTeamStats>();
+                UserTeamStats userTeamStat = new ContestsRepository().GetUserTeamPlayerStats(_db, userTeamRequest);
+                if (userTeamStat != null)
+                {
+                    userTeamStats.Add(userTeamStat);
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, userTeamStats);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, userTeamStats);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
         #endregion
     }
 }

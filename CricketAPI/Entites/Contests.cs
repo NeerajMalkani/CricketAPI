@@ -167,6 +167,8 @@ namespace CricketAPI.Entites
     {
         public int player_id { get; set; }
         public string? player_name { get; set; }
+        public string? player_position { get; set; }
+        public string? player_image_path { get; set; }
         public int is_captain { get; set; }
         public int is_vice_captain { get; set; }
         public PlayingTeam? playing_team { get; set; }

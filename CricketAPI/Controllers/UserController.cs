@@ -18,6 +18,58 @@ namespace CricketAPI.Controllers
             _db = dbContext;
         }
 
+        #region Users
+        [HttpPost]
+        [Route("")]
+        public async Task<Response> InsertUser([FromBody] Users users)
+        {
+            Response response = new Response();
+            try
+            {
+                int rowsAffected = await new UserRepository().InsertUser(_db, users);
+                if (rowsAffected > 0)
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+        #endregion
+
+        #region Transactions
+        [HttpPost]
+        [Route("transactions")]
+        public async Task<Response> InsertTransaction([FromBody] Transactions transactions)
+        {
+            Response response = new Response();
+            try
+            {
+                int rowsAffected = await new UserRepository().InsertTransactions(_db, transactions);
+                if (rowsAffected > 0)
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+        #endregion
+
         #region User teams
         [HttpPost]
         [Route("teams")]

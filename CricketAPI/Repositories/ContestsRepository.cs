@@ -375,6 +375,24 @@ namespace CricketAPI.Repositories
             }
             return userTeamStats;
         }
+
+        public UserTeamStats GetUserTeamPlayerStats(DataContext context, UserTeamRequest userTeamRequest)
+        {
+            UserTeamStats userTeamStats = new UserTeamStats();
+            try
+            {
+                List<UserTeamPointsJson> contestsLeaderboardJsons = context.UserTeamPointsJson.FromSqlRaw("CALL `cric_Get_UserSingleTeamPlayerPoints`(" + userTeamRequest.fixture_id + ", " + userTeamRequest.user_team_id + ",'" + userTeamRequest.user_id + "')").ToList();
+                if (contestsLeaderboardJsons.Count > 0)
+                {
+                    userTeamStats = JsonConvert.DeserializeObject<UserTeamStats>(contestsLeaderboardJsons[0].UserTeamStats) ?? throw new ArgumentException();
+                }
+            }
+            catch (Exception)
+            {
+                userTeamStats = new UserTeamStats();
+            }
+            return userTeamStats;
+        }
         #endregion
     }
 }

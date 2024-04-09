@@ -198,5 +198,55 @@ namespace CricketAPI.Repositories
             }
             return rowsAffected;
         }
+
+        public async Task<int> InsertUser(DataContext context, Users users)
+        {
+            int rowsAffected = 0;
+            try
+            {
+                if (users != null)
+                {
+                    Users? userDetails = context.Users.Where(item => item.id == users.id).FirstOrDefault();
+                    if(userDetails != null)
+                    {
+                        userDetails.fullname = users.fullname;
+                        userDetails.gender = users.gender;
+                        userDetails.dob = users.dob;
+                    } else
+                    {
+                        await context.Users.AddAsync(users);
+                    }
+                    
+                    await context.SaveChangesAsync();
+                    rowsAffected++;
+                }
+
+            }
+            catch (Exception)
+            {
+                rowsAffected = 0;
+            }
+            return rowsAffected;
+        }
+
+        public async Task<int> InsertTransactions(DataContext context, Transactions transactions)
+        {
+            int rowsAffected = 0;
+            try
+            {
+                if (transactions != null)
+                {
+                    await context.Transactions.AddAsync(transactions);
+                    await context.SaveChangesAsync();
+                    rowsAffected++;
+                }
+
+            }
+            catch (Exception)
+            {
+                rowsAffected = 0;
+            }
+            return rowsAffected;
+        }
     }
 }

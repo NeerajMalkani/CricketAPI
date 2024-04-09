@@ -4,6 +4,27 @@ using System.Text.Json.Serialization;
 
 namespace CricketAPI.Entites
 {
+    #region User
+    public class Users
+    {
+        public string? id { get; set; }
+        public string? fullname { get; set; }
+        public int? gender { get; set; }
+        public DateTime? dob { get; set; }
+        public decimal? balance { get; set; }
+        public long? rank { get; set; }
+    }
+    #endregion
+
+    #region Transactions
+    public class Transactions
+    {
+        public string? payment_id { get; set; }
+        public string? user_id { get; set; }
+        public long? contest_id { get; set; }
+        public decimal? amount { get; set; }
+    }
+    #endregion
 
     #region Insert Team
     public class UserTeam
