@@ -38,7 +38,7 @@ namespace CricketAPI.Repositories
                         break;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 fixtures = new List<Fixtures>();
             }

@@ -229,6 +229,24 @@ namespace CricketAPI.Repositories
             return rowsAffected;
         }
 
+        public Users? GetUser(DataContext context, Users users)
+        {
+            Users? getUser = new Users();
+            try
+            {
+                if (users != null)
+                {
+                    getUser = context.Users.Where(item => item.id == users.id).FirstOrDefault();
+                }
+
+            }
+            catch (Exception)
+            {
+                getUser = new Users();
+            }
+            return getUser;
+        }
+
         public async Task<int> InsertTransactions(DataContext context, Transactions transactions)
         {
             int rowsAffected = 0;

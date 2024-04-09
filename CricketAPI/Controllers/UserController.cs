@@ -42,6 +42,32 @@ namespace CricketAPI.Controllers
             }
             return response;
         }
+
+        [HttpGet]
+        [Route("")]
+        public Response GetUser([FromQuery] Users users)
+        {
+            Response response = new Response();
+            try
+            {
+                Users? getUser = new UserRepository().GetUser(_db, users);
+                if (getUser != null)
+                {
+                    List<Users> users1 = new List<Users>();
+                    users1.Add(getUser);
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, users1);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
         #endregion
 
         #region Transactions
