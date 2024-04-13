@@ -114,6 +114,7 @@ namespace CricketAPI
     [Keyless]
     public class Batting
     {
+        public long? id { get; set; }
         public string? batsman { get; set; }
         public string? image_path { get; set; }
         public int? runs { get; set; }
@@ -130,6 +131,7 @@ namespace CricketAPI
     [Keyless]
     public class Bowling
     {
+        public long? id { get; set; }
         public string? bowler { get; set; }
         public string? image_path { get; set; }
         public double? overs { get; set; }

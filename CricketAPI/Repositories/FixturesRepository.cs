@@ -142,7 +142,7 @@ namespace CricketAPI.Repositories
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 fixturesBalls = new Fixtures_Balls();
             }
