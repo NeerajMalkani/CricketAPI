@@ -686,7 +686,8 @@ namespace CricketAPI.Controllers
                     }
 
                     fixturesBallsLst[0].balls?.Reverse();
-                    fixturesBallsLst[0].balls = fixturesBallsLst[0].balls?.Where(e => Decimal.Truncate(Convert.ToDecimal(e.ball)) >= start_index && Decimal.Truncate(Convert.ToDecimal(e.ball)) < (start_index + count)).ToList();
+                    decimal lastOver = Decimal.Truncate(Convert.ToDecimal(fixturesBallsLst[0].balls?[0].ball));
+                    fixturesBallsLst[0].balls = fixturesBallsLst[0].balls?.Where(e => Decimal.Truncate(Convert.ToDecimal(e.ball)) <= (lastOver - start_index) && Decimal.Truncate(Convert.ToDecimal(e.ball)) > (lastOver - (start_index + count))).ToList();
 
                     if (fixturesBallsLst[0] != null && fixturesBallsLst[0].miniscore != null && fixturesBallsLst[0]?.miniscore?.batting != null)
                     {
