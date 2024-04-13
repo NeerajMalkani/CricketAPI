@@ -38,7 +38,7 @@ namespace CricketAPI.Controllers
                             if (overs != null)
                             {
                                 int? over = (Convert.ToInt16(overs?[0]) * 6) + (overs != null && overs?.Count > 1 ? Convert.ToInt16(overs?[1]) : 0);
-                                if (fixture.match_info != null)
+                                if (fixture.match_info != null && Convert.ToDecimal(over) > 0)
                                 {
                                     fixture.match_info.rpc_overs = Math.Round((Convert.ToDecimal(score) / Convert.ToDecimal(over)) * 6, 2).ToString();
                                 }
@@ -108,7 +108,7 @@ namespace CricketAPI.Controllers
                             if (overs != null)
                             {
                                 int? over = (Convert.ToInt16(overs?[0]) * 6) + (overs != null && overs?.Count > 1 ? Convert.ToInt16(overs?[1]) : 0);
-                                if (fixture.match_info != null)
+                                if (fixture.match_info != null && Convert.ToDecimal(over) > 0)
                                 {
                                     fixture.match_info.rpc_overs = Math.Round((Convert.ToDecimal(score) / Convert.ToDecimal(over)) * 6, 2).ToString();
                                 }
@@ -258,7 +258,7 @@ namespace CricketAPI.Controllers
                     if (overs != null)
                     {
                         int? over = (Convert.ToInt16(overs?[0]) * 6) + (overs != null && overs?.Count > 1 ? Convert.ToInt16(overs?[1]) : 0);
-                        if (fixturesBalls != null)
+                        if (fixturesBalls != null && Convert.ToDecimal(over) > 0)
                         {
                             fixturesBalls.rpc_overs = Math.Round((Convert.ToDecimal(score) / Convert.ToDecimal(over)) * 6, 2).ToString();
                         }
@@ -405,7 +405,7 @@ namespace CricketAPI.Controllers
                     if (overs != null)
                     {
                         int? over = (Convert.ToInt16(overs?[0]) * 6) + (overs != null && overs?.Count > 1 ? Convert.ToInt16(overs?[1]) : 0);
-                        if (fixturesBalls != null)
+                        if (fixturesBalls != null && Convert.ToDecimal(over) > 0)
                         {
                             fixturesBalls.rpc_overs = Math.Round((Convert.ToDecimal(score) / Convert.ToDecimal(over)) * 6, 2).ToString();
                         }
@@ -566,7 +566,7 @@ namespace CricketAPI.Controllers
                     if (overs != null)
                     {
                         int? over = (Convert.ToInt16(overs?[0]) * 6) + (overs != null && overs?.Count > 1 ? Convert.ToInt16(overs?[1]) : 0);
-                        if (fixturesBalls != null)
+                        if (fixturesBalls != null && Convert.ToDecimal(over) > 0)
                         {
                             fixturesBalls.rpc_overs = Math.Round((Convert.ToDecimal(score) / Convert.ToDecimal(over)) * 6, 2).ToString();
                         }
