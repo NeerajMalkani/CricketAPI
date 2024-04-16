@@ -140,7 +140,9 @@ namespace CricketAPI.Entites
         [JsonIgnore]
         public long? contest_id { get; set; }
         public string? team_name { get; set; }
+        public string? team_code { get; set; }
         public string? team_color { get; set; }
+        public string? team_image_path { get; set; }
         public long? player_id { get; set; }
         public decimal? player_points { get; set; }
         public string? player_fullname { get; set; }

@@ -195,6 +195,7 @@ namespace CricketAPI
         public int? player_position { get; set; }
         public string? player_image_path { get; set; }
         public string? player_is_captain { get; set; }
+        public string? player_is_substitution { get; set; }
         public string? player_batting_style { get; set; }
         public string? player_bowling_style { get; set; }
         public string? player_position_name { get; set; }

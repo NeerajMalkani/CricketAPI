@@ -387,7 +387,7 @@ namespace CricketAPI.Repositories
                     userTeamStats = JsonConvert.DeserializeObject<UserTeamStats>(contestsLeaderboardJsons[0].UserTeamStats) ?? throw new ArgumentException();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 userTeamStats = new UserTeamStats();
             }
