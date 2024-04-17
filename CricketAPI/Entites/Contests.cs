@@ -129,6 +129,7 @@ namespace CricketAPI.Entites
     
     public class Leaderboard
     {
+        public string? user_id { get; set; }
         public long team_id { get; set; }
         public string? team_name { get; set; }
         public string? team_image_path { get; set; }
