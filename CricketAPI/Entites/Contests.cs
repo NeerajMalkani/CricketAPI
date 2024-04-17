@@ -131,7 +131,8 @@ namespace CricketAPI.Entites
     {
         public long team_id { get; set; }
         public string? team_name { get; set; }
-        public int team_points { get; set; }
+        public string? team_image_path { get; set; }
+        public int? team_points { get; set; }
     }
 
 
