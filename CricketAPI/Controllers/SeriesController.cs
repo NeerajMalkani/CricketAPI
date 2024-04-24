@@ -74,7 +74,7 @@ namespace CricketAPI.Controllers
         #region Get Series Fixtures
         [HttpGet]
         [Route("fixtures")]
-        public Response GetSeriesFixtures(long series_id, long stage_id)
+        public Response GetSeriesFixtures(long series_id, long stage_id, bool onlyUpcoming = false)
         {
             Response response = new Response();
             try
@@ -82,6 +82,10 @@ namespace CricketAPI.Controllers
                 List<Fixtures> fixtures = new SeriesRepository().GetSeriesFixtures(_db, series_id, stage_id);
                 if (fixtures.Any())
                 {
+                    if (onlyUpcoming)
+                    {
+                        fixtures = fixtures.Where(el => el.match_info?.status == "NS").Take(5).ToList();
+                    }
                     Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, fixtures);
                 }
                 else
@@ -159,7 +163,7 @@ namespace CricketAPI.Controllers
                 List<LastSeries> lastSeries = new SeriesRepository().GetLastSeries(_db, series_id);
                 if (lastSeries.Any())
                 {
-                    int top10_3 =  Convert.ToInt32(Math.Floor(lastSeries.Count * 0.03));
+                    int top10_3 = Convert.ToInt32(Math.Floor(lastSeries.Count * 0.03));
                     int top9_5_7 = Convert.ToInt32(Math.Floor(lastSeries.Count * 0.10));
                     int top9_20 = Convert.ToInt32(Math.Floor(lastSeries.Count * 0.30));
                     int top8_5_30 = Convert.ToInt32(Math.Floor(lastSeries.Count * 0.50));
@@ -176,10 +180,11 @@ namespace CricketAPI.Controllers
                         UpdateSeriesPoints updateSeriesPoints = new UpdateSeriesPoints();
                         updateSeriesPoints.series_id = series_id;
                         updateSeriesPoints.player_id = lastSeries[i].player_id;
-                        if(i <= top10_3)
+                        if (i <= top10_3)
                         {
                             updateSeriesPoints.points = Convert.ToDecimal(10.0);
-                        } else if (i <= top9_5_7)
+                        }
+                        else if (i <= top9_5_7)
                         {
                             updateSeriesPoints.points = Convert.ToDecimal(9.5);
                         }

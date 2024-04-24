@@ -56,7 +56,7 @@ namespace CricketAPI.Repositories
                     fixtures = JsonConvert.DeserializeObject<List<Fixtures>>(fixturesJson[0].Fixtures) ?? throw new ArgumentException();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 fixtures = new List<Fixtures>();
             }
