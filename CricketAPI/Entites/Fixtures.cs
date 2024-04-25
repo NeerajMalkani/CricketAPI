@@ -12,6 +12,7 @@ namespace CricketAPI
         public string? code { get; set; }
         public string? name { get; set; }
         public string? color { get; set; }
+        public string? captain_image_path { get; set; }
         public string? image_path { get; set; }
     }
     public class Visitorteam
@@ -21,6 +22,7 @@ namespace CricketAPI
         public string? code { get; set; }
         public string? name { get; set; }
         public string? color { get; set; }
+        public string? captain_image_path { get; set; }
         public string? image_path { get; set; }
     }
     public class ManOfTheMatch
