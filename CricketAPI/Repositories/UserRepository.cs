@@ -19,6 +19,11 @@ namespace CricketAPI.Repositories
                     {
                         context.UserTeam.Add(userSaveTeamRequest.userTeam);
                         await context.SaveChangesAsync();
+                        UserContestMapping userContestMapping = new UserContestMapping();
+                        userContestMapping.user_team_id = userSaveTeamRequest.userTeam.id;
+                        userContestMapping.contest_id = userSaveTeamRequest.userTeam.contest_id;
+                        context.UserContestMapping.Add(userContestMapping);
+                        await context.SaveChangesAsync();
                     }
                     foreach (UserTeamPlayers team in userSaveTeamRequest.userTeamPlayers)
                     {

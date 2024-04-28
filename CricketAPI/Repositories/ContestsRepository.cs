@@ -222,13 +222,18 @@ namespace CricketAPI.Repositories
             return rowsAffected;
         }
 
-        public async Task<int> UpdateUserContestWithTeam(DataContext context, UserContestWithTeamRequest userContestWithTeamRequest)
+        public async Task<int> UpdateUserContestWithTeam(DataContext context, UserContestMapping userContestWithTeamRequest)
         {
             int rowsAffected = 0;
-            UserTeam? userTeam = context.UserTeam.ToList().Where(el => el.id == userContestWithTeamRequest.user_team_id).FirstOrDefault();
-            if (userTeam != null)
+            UserContestMapping? userTeam = context.UserContestMapping.ToList().Where(el => el.user_team_id == userContestWithTeamRequest.user_team_id).FirstOrDefault();
+            if (userTeam != null && userTeam.contest_id == null)
             {
                 userTeam.contest_id = userContestWithTeamRequest.contest_id;
+                await context.SaveChangesAsync();
+                rowsAffected = 1;
+            } else
+            {
+                context.UserContestMapping.Add(userContestWithTeamRequest);
                 await context.SaveChangesAsync();
                 rowsAffected = 1;
             }

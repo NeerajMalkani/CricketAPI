@@ -100,7 +100,7 @@ namespace CricketAPI.Controllers
 
         [HttpPut]
         [Route("userteam")]
-        public async Task<Response> UpdateUserContestWithTeamAsync([FromBody] UserContestWithTeamRequest userContestWithTeamRequest)
+        public async Task<Response> UpdateUserContestWithTeamAsync([FromBody] UserContestMapping userContestWithTeamRequest)
         {
             Response response = new Response();
             try

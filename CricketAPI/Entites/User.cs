@@ -30,6 +30,14 @@ namespace CricketAPI.Entites
     #endregion
 
     #region Insert Team
+    public class UserContestMapping
+    {
+        [Key]
+        public long id { get; set; }
+        public long? user_team_id { get; set; }
+        public long? contest_id { get; set; }
+
+    }
     public class UserTeam
     {
         [Key]
