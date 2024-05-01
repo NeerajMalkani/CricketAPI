@@ -122,6 +122,30 @@ namespace CricketAPI.Controllers
             return response;
         }
 
+        [HttpDelete]
+        [Route("userteam")]
+        public async Task<Response> DeleteUserTeamForContest([FromBody] UserContestMapping userContestMapping)
+        {
+            Response response = new Response();
+            try
+            {
+                int rowsAffected = await new ContestsRepository().DeleteUserTeamForContest(_db, userContestMapping);
+                if (rowsAffected > 0)
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+
         [HttpGet]
         [Route("list")]
         public Response GetContests([FromQuery] long fixture_id)

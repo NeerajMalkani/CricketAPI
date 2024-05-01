@@ -231,11 +231,35 @@ namespace CricketAPI.Repositories
                 userTeam.contest_id = userContestWithTeamRequest.contest_id;
                 await context.SaveChangesAsync();
                 rowsAffected = 1;
-            } else
+            }
+            else
             {
                 context.UserContestMapping.Add(userContestWithTeamRequest);
                 await context.SaveChangesAsync();
                 rowsAffected = 1;
+            }
+            return rowsAffected;
+        }
+
+        public async Task<int> DeleteUserTeamForContest(DataContext context, UserContestMapping userContestMapping)
+        {
+            int rowsAffected = 0;
+            try
+            {
+                if (userContestMapping != null)
+                {
+                    UserContestMapping userContest = context.UserContestMapping.Where(item => item.user_team_id == userContestMapping.user_team_id && item.contest_id == userContestMapping.contest_id).First();
+                    if (userContest != null)
+                    {
+                        context.UserContestMapping.Remove(userContest);
+                        await context.SaveChangesAsync();
+                    }
+                    rowsAffected++;
+                }
+            }
+            catch (Exception)
+            {
+                rowsAffected = 0;
             }
             return rowsAffected;
         }
