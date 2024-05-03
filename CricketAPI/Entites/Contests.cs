@@ -189,5 +189,17 @@ namespace CricketAPI.Entites
         [Key]
         public string UserTeamStats { get; set; } = "";
     }
+
+    public class ContestUserTeamStatsRequest
+    {
+        public List<long>? user_team_id { get; set; }
+    }
+
+    public class UserTeamPointsStats
+    {
+        public long id { get; set; }
+        public long user_team_id { get; set; }
+        public string? points { get; set; }
+    }
     #endregion
 }

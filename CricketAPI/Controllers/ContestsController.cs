@@ -360,7 +360,7 @@ namespace CricketAPI.Controllers
             Response response = new Response();
             try
             {
-                List<ContestLeaderboard> contestLeaderboards = new List<ContestLeaderboard>(); 
+                List<ContestLeaderboard> contestLeaderboards = new List<ContestLeaderboard>();
                 ContestLeaderboard contestsLeaderboard = new ContestsRepository().GetUserContestLeaderboard(_db, contestLeaderboardRequest);
                 if (contestsLeaderboard != null)
                 {
@@ -423,6 +423,30 @@ namespace CricketAPI.Controllers
                 else
                 {
                     Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response, userTeamStats);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+
+        [HttpGet]
+        [Route("user/team/graphs")]
+        public Response GetUserTeamStats([FromQuery] ContestUserTeamStatsRequest contestUserTeamStats)
+        {
+            Response response = new Response();
+            try
+            {
+                List<UserTeamPointsStats>? userTeamStats = new ContestsRepository().GetUserTeamStats(_db, contestUserTeamStats);
+                if (userTeamStats != null)
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, userTeamStats);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response);
                 }
             }
             catch (Exception ex)

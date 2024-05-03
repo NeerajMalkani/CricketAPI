@@ -422,6 +422,23 @@ namespace CricketAPI.Repositories
             }
             return userTeamStats;
         }
+
+        public List<UserTeamPointsStats>? GetUserTeamStats(DataContext context, ContestUserTeamStatsRequest contestUserTeamStats)
+        {
+            List<UserTeamPointsStats>? userTeamPointsStats = new List<UserTeamPointsStats>();
+            try
+            {
+                if (contestUserTeamStats.user_team_id != null)
+                {
+                    userTeamPointsStats = context.UserTeamPointsStats.Where(el => contestUserTeamStats.user_team_id.Contains(el.user_team_id)).ToList();
+                }
+            }
+            catch (Exception)
+            {
+                userTeamPointsStats = new List<UserTeamPointsStats>();
+            }
+            return userTeamPointsStats;
+        }
         #endregion
     }
 }
