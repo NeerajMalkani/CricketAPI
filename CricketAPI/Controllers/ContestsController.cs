@@ -455,6 +455,30 @@ namespace CricketAPI.Controllers
             }
             return response;
         }
+
+        [HttpGet]
+        [Route("user/team/player/points")]
+        public Response GetUserTeamPlayerPoints([FromQuery] UserTeamPlayerPointsRequest userTeamPlayerPointsRequest)
+        {
+            Response response = new Response();
+            try
+            {
+                List<FantasyPoints>? fantasyPoints = new ContestsRepository().GetFantasyPoints(_db, userTeamPlayerPointsRequest);
+                if (fantasyPoints != null)
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, fantasyPoints);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
         #endregion
     }
 }

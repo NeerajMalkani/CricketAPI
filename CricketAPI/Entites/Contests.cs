@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
 
 namespace CricketAPI.Entites
 {
@@ -43,7 +44,7 @@ namespace CricketAPI.Entites
     }
 
 
-        public class ContestRequest
+    public class ContestRequest
     {
         public long fixture_id { get; set; }
         public string? user_id { get; set; }
@@ -107,14 +108,14 @@ namespace CricketAPI.Entites
         public long fixture_id { get; set; }
         public long contest_id { get; set; }
     }
-    
+
 
     public class ContestsLeaderboardJson
     {
         [Key]
         public string ContestLeaderboard { get; set; } = "";
     }
-    
+
     public class ContestLeaderboard
     {
         public int id { get; set; }
@@ -126,7 +127,7 @@ namespace CricketAPI.Entites
         public int max_pool_prize { get; set; }
         public List<Leaderboard>? leaderboard { get; set; }
     }
-    
+
     public class Leaderboard
     {
         public string? user_id { get; set; }
@@ -200,6 +201,38 @@ namespace CricketAPI.Entites
         public long id { get; set; }
         public long user_team_id { get; set; }
         public string? points { get; set; }
+    }
+
+    public class UserTeamPlayerPointsRequest
+    {
+        public long? fixture_id { get; set; }
+        public long? player_id { get; set; }
+    }
+
+    public class FantasyPoints
+    {
+        public long? id { get; set; }
+        public long? fixture_id { get; set; }
+        public long? player_id { get; set; }
+        public string? fullname { get; set; }
+        public int? playingpoints { get; set; }
+        public int? scorepoints { get; set; }
+        public int? fourpoints { get; set; }
+        public int? sixpoints { get; set; }
+        public int? duckpoints { get; set; }
+        public int? thirtypoints { get; set; }
+        public int? fiftypoints { get; set; }
+        public int? hundredpoints { get; set; }
+        public int? strikeratepoints { get; set; }
+        public int? catchstumpspoints { get; set; }
+        public int? runoutpoints { get; set; }
+        public int? wicketspoints { get; set; }
+        public int? medianspoints { get; set; }
+        public int? threewicketpoints { get; set; }
+        public int? fourwicketpoints { get; set; }
+        public int? fivewicketpoints { get; set; }
+        public int? ecopoints { get; set; }
+        public int? totalpoints { get; set; }
     }
     #endregion
 }

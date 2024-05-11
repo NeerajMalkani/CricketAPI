@@ -51,7 +51,7 @@ namespace CricketAPI.Helpers
         public DbSet<Users> Users => Set<Users>();
         public DbSet<Transactions> Transactions => Set<Transactions>();
         public DbSet<UserTeamPointsStats> UserTeamPointsStats => Set<UserTeamPointsStats>();
-        
+        public DbSet<FantasyPoints> FantasyPoints => Set<FantasyPoints>();
 
     }
 }

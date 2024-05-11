@@ -440,6 +440,23 @@ namespace CricketAPI.Repositories
             }
             return userTeamPointsStats;
         }
+
+        public List<FantasyPoints>? GetFantasyPoints(DataContext context, UserTeamPlayerPointsRequest userTeamPlayerPointsRequest)
+        {
+            List<FantasyPoints>? fantasyPoints = new List<FantasyPoints>();
+            try
+            {
+                if (userTeamPlayerPointsRequest != null)
+                {
+                    fantasyPoints = context.FantasyPoints.Where(el => el.fixture_id == userTeamPlayerPointsRequest.fixture_id && el.player_id == userTeamPlayerPointsRequest.player_id).ToList();
+                }
+            }
+            catch (Exception)
+            {
+                fantasyPoints = new List<FantasyPoints>();
+            }
+            return fantasyPoints;
+        }
         #endregion
     }
 }
