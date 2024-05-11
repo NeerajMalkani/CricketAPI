@@ -430,10 +430,11 @@ namespace CricketAPI.Repositories
             {
                 if (contestUserTeamStats.user_team_id != null)
                 {
-                    userTeamPointsStats = context.UserTeamPointsStats.Where(el => contestUserTeamStats.user_team_id.Contains(el.user_team_id)).ToList();
+                    List<long>? vs = contestUserTeamStats.user_team_id.Split(',').Select(long.Parse).ToList();
+                    userTeamPointsStats = context.UserTeamPointsStats.Where(el => vs.Contains(el.user_team_id)).ToList();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 userTeamPointsStats = new List<UserTeamPointsStats>();
             }

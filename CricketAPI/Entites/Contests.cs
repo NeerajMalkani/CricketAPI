@@ -192,7 +192,7 @@ namespace CricketAPI.Entites
 
     public class ContestUserTeamStatsRequest
     {
-        public List<long>? user_team_id { get; set; }
+        public string? user_team_id { get; set; }
     }
 
     public class UserTeamPointsStats
