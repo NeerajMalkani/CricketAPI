@@ -128,7 +128,7 @@ namespace CricketAPI.Controllers
                                         fixture.match_info.rpc_target = Math.Round((Convert.ToDecimal(remaining_score) / Convert.ToDecimal(remaining_overs)) * 6, 2).ToString();
                                     }
                                     string? battingTeam = fixture.match_score?[fixture.match_score.Count - 1].team_id == fixture.match_info.localteam?.id ? fixture.match_info.localteam?.name : fixture.match_info.visitorteam?.name;
-                                    fixture.match_info.note = battingTeam + " requires " + remaining_score + (remaining_overs == 1 ? " run" : " runs") + " in " + remaining_overs + (remaining_overs == 1 ? " ball" : " balls");
+                                    fixture.match_info.note = battingTeam + " requires " + (remaining_score < 0 ? 0 : remaining_score) + (remaining_overs == 1 ? " run" : " runs") + " in " + remaining_overs + (remaining_overs == 1 ? " ball" : " balls");
                                 }
                             }
                             else if (string.IsNullOrEmpty(fixture.match_info?.note) && fixture.match_info != null)
@@ -282,7 +282,7 @@ namespace CricketAPI.Controllers
                             string? battingTeam = fixturesBalls?.match_score?[fixturesBalls.match_score.Count - 1].team_id == fixturesBalls?.localteam?.id ? fixturesBalls?.localteam?.name : fixturesBalls?.visitorteam?.name;
                             if (fixturesBalls != null)
                             {
-                                fixturesBalls.note = battingTeam + " requires " + remaining_score + (remaining_overs == 1 ? " run" : " runs") + " in " + remaining_overs + (remaining_overs == 1 ? " ball" : " balls");
+                                fixturesBalls.note = battingTeam + " requires " + (remaining_score < 0 ? 0 : remaining_score) + (remaining_overs == 1 ? " run" : " runs") + " in " + remaining_overs + (remaining_overs == 1 ? " ball" : " balls");
                             }
                         }
                     }
@@ -429,7 +429,7 @@ namespace CricketAPI.Controllers
                             string? battingTeam = fixturesBalls?.match_score?[fixturesBalls.match_score.Count - 1].team_id == fixturesBalls?.localteam?.id ? fixturesBalls?.localteam?.name : fixturesBalls?.visitorteam?.name;
                             if (fixturesBalls != null)
                             {
-                                fixturesBalls.note = battingTeam + " requires " + remaining_score + (remaining_overs == 1 ? " run" : " runs") + " in " + remaining_overs + (remaining_overs == 1 ? " ball" : " balls");
+                                fixturesBalls.note = battingTeam + " requires " + (remaining_score < 0 ? 0 : remaining_score) + (remaining_overs == 1 ? " run" : " runs") + " in " + remaining_overs + (remaining_overs == 1 ? " ball" : " balls");
                             }
                         }
                     }
@@ -590,7 +590,7 @@ namespace CricketAPI.Controllers
                             string? battingTeam = fixturesBalls?.match_score?[fixturesBalls.match_score.Count - 1].team_id == fixturesBalls?.localteam?.id ? fixturesBalls?.localteam?.name : fixturesBalls?.visitorteam?.name;
                             if (fixturesBalls != null)
                             {
-                                fixturesBalls.note = battingTeam + " requires " + remaining_score + (remaining_overs == 1 ? " run" : " runs") + " in " + remaining_overs + (remaining_overs == 1 ? " ball" : " balls");
+                                fixturesBalls.note = battingTeam + " requires " + (remaining_score < 0 ? 0 : remaining_score) + (remaining_overs == 1 ? " run" : " runs") + " in " + remaining_overs + (remaining_overs == 1 ? " ball" : " balls");
                             }
                         }
                     }
