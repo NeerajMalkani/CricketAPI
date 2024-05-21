@@ -156,6 +156,10 @@ namespace CricketAPI.Controllers
                 List<Contests> contests = new ContestsRepository().GetContests(_db, fixture_id);
                 if (contests.Any())
                 {
+                    foreach (Contests contest in contests)
+                    {
+                        contest.spots_filled = new ContestsRepository().GetContestsSpotsFilled(_db, contest.id);
+                    }
                     Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, contests);
                 }
                 else

@@ -278,6 +278,20 @@ namespace CricketAPI.Repositories
             return contests;
         }
 
+        public int GetContestsSpotsFilled(DataContext context, long contest_id)
+        {
+            int spots_filled = 0;
+            try
+            {
+                spots_filled = context.UserJoinedContests.Where(el => el.contest_id == contest_id).ToList().Count();
+            }
+            catch (Exception ex)
+            {
+                spots_filled = 0;
+            }
+            return spots_filled;
+        }
+
         public List<ContestsHome> GetContestsHome(DataContext context, ContestRequest contestRequest)
         {
             List<ContestsHome> contests = new List<ContestsHome>();
