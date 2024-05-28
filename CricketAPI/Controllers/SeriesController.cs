@@ -74,7 +74,7 @@ namespace CricketAPI.Controllers
         #region Get Series Fixtures
         [HttpGet]
         [Route("fixtures")]
-        public Response GetSeriesFixtures(long series_id, long stage_id, bool onlyUpcoming = false)
+        public Response GetSeriesFixtures(long series_id, long stage_id, int onlyUpcoming = 0)
         {
             Response response = new Response();
             try
@@ -82,7 +82,7 @@ namespace CricketAPI.Controllers
                 List<Fixtures> fixtures = new SeriesRepository().GetSeriesFixtures(_db, series_id, stage_id);
                 if (fixtures.Any())
                 {
-                    if (onlyUpcoming)
+                    if (onlyUpcoming == 1)
                     {
                         fixtures = fixtures.Where(el => el.match_info?.status == "NS").Take(5).ToList();
                     }
