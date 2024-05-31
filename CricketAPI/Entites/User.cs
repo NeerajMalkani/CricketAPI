@@ -8,6 +8,7 @@ namespace CricketAPI.Entites
     public class Users
     {
         public string? id { get; set; }
+        public string? gcm_token { get; set; }
         public string? fullname { get; set; }
         public int? gender { get; set; }
         public DateTime? dob { get; set; }
@@ -15,6 +16,17 @@ namespace CricketAPI.Entites
         public decimal? balance { get; set; }
         public long? rank { get; set; }
     }
+
+    [Keyless]
+    public class GCMTokens
+    {
+        public string? id { get; set; }
+        public string? gcm_token { get; set; }
+        public string? fullname { get; set; }
+        public string? photoURL { get; set; }
+
+    }
+
     #endregion
 
     #region Transactions

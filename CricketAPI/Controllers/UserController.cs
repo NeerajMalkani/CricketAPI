@@ -68,6 +68,30 @@ namespace CricketAPI.Controllers
             }
             return response;
         }
+
+        [HttpGet]
+        [Route("gcmtokens")]
+        public Response GetGCMTokens([FromQuery] Users users)
+        {
+            Response response = new Response();
+            try
+            {
+                List<GCMTokens> gCMTokens = new UserRepository().GetGCMTokens(_db, users);
+                if (gCMTokens != null)
+                {
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, gCMTokens);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
         #endregion
 
         #region Transactions

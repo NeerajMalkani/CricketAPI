@@ -217,6 +217,7 @@ namespace CricketAPI.Repositories
                         userDetails.fullname = users.fullname;
                         userDetails.gender = users.gender;
                         userDetails.dob = users.dob;
+                        userDetails.gcm_token = users.gcm_token;
                     } else
                     {
                         await context.Users.AddAsync(users);
@@ -250,6 +251,24 @@ namespace CricketAPI.Repositories
                 getUser = new Users();
             }
             return getUser;
+        }
+
+        public List<GCMTokens> GetGCMTokens(DataContext context, Users users)
+        {
+            List<GCMTokens> gCMTokens = new List<GCMTokens>();
+            try
+            {
+                if (users != null)
+                {
+                    gCMTokens = context.GCMTokens.FromSqlRaw("CALL `cric_Get_GMCTokens`('" + users.id + "')").ToList();
+                }
+
+            }
+            catch (Exception)
+            {
+                gCMTokens = new List<GCMTokens>();
+            }
+            return gCMTokens;
         }
 
         public async Task<int> InsertTransactions(DataContext context, Transactions transactions)
