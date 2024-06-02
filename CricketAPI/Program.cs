@@ -1,4 +1,6 @@
 using CricketAPI.Helpers;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 
@@ -20,7 +22,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 var app = builder.Build();
 var loggerFactory = app.Services.GetService<ILoggerFactory>();
-loggerFactory.AddFile(builder.Configuration["Logging:LogFilePath"].ToString());  
+loggerFactory.AddFile(builder.Configuration["Logging:LogFilePath"].ToString());
+
+//FirebaseApp.Create(new AppOptions()
+//{
+//    Credential = GoogleCredential.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "starselector-af5b2-firebase-adminsdk-zohvq-2cd40d052e.json")),
+//});
+
 //app.UseMiddleware<ApiKeyMiddleware>();
 app.UseCors(builder =>
 {
@@ -31,11 +39,11 @@ app.UseCors(builder =>
 });
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+app.UseSwagger();
+app.UseSwaggerUI();
+//}
 
 app.UseHttpsRedirection();
 app.UseRouting();

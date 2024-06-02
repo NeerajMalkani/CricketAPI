@@ -1,6 +1,9 @@
 ﻿using CricketAPI.Entites;
 using CricketAPI.Helpers;
 using CricketAPI.Repositories;
+using FirebaseAdmin;
+using FirebaseAdmin.Messaging;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -12,10 +15,13 @@ namespace CricketAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly DataContext _db;
-
-        public UserController(DataContext dbContext)
+        private Microsoft.AspNetCore.Hosting.IHostingEnvironment env;
+        private readonly ILogger _logger;
+        public UserController(DataContext dbContext, Microsoft.AspNetCore.Hosting.IHostingEnvironment env, ILogger<UserController> logger)
         {
             _db = dbContext;
+            this.env = env;
+            _logger = logger;
         }
 
         #region Users
@@ -311,6 +317,64 @@ namespace CricketAPI.Controllers
                 if (rowsAffected > 0)
                 {
                     Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response);
+                }
+                else
+                {
+                    Common.CreateResponse(HttpStatusCode.NoContent, "Success", "No data", out response);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.CreateErrorResponse(HttpStatusCode.BadRequest, out response, ex);
+            }
+            return response;
+        }
+
+        [HttpPost]
+        [Route("sendmessagetodevice")]
+        public async Task<Response> SendNotificationToDevice([FromBody] MessageRequest messageRequest)
+        {
+            Response response = new Response();
+            try
+            {
+                var path = env.ContentRootPath;
+                path = path + @"starselector-af5b2-firebase-adminsdk-zohvq-2cd40d052e.json";
+                _logger.LogInformation(path);
+                FirebaseApp app = null;
+                try
+                {
+                    app = FirebaseApp.Create(new AppOptions()
+                    {
+                        Credential = GoogleCredential.FromFile(path)
+                    }, "starselector -af5b2");
+                }
+                catch (Exception ex)
+                {
+                    app = FirebaseApp.GetInstance("starselector-af5b2");
+                }
+                _logger.LogInformation(app.ToString());
+                var message = new Message()
+                {
+                    Notification = new Notification
+                    {
+                        Title = messageRequest.Title,
+                        Body = messageRequest.Body
+                    },
+                    //Data = new Dictionary<string, string>()
+                    //{
+                    //    ["CustomData"] = "Custom Data"
+                    //},
+                    Token = messageRequest.DeviceToken
+                };
+                _logger.LogInformation(message.ToString());
+                var fcm = FirebaseMessaging.GetMessaging(app);
+                var result = await fcm.SendAsync(message).ConfigureAwait(false);
+                _logger.LogInformation(result);
+                if (!string.IsNullOrEmpty(result))
+                {
+                    List<string> lstResult = new List<string>();
+                    lstResult.Add(result);
+                    Common.CreateResponse(HttpStatusCode.OK, "Success", "Success", out response, lstResult);
                 }
                 else
                 {
